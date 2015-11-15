@@ -1,0 +1,615 @@
+@relation Test_1-weka.filters.unsupervised.attribute.NumericToNominal-Rfirst-last
+
+@attribute MaritalStatus {Single,Married}
+@attribute Gender {Male,Female}
+@attribute Children {0,1}
+@attribute Occupation {Manual,Clerical,'Skilled Manual',Professional,Management}
+@attribute HomeOwner {No,Yes}
+@attribute Cars {0,1}
+@attribute CommuteDistance {'0-1 Miles','2-5 Miles','1-2 Miles','5-10 Miles','10+ Miles'}
+@attribute Age {40-54,25-39,55-69,70-84}
+@attribute BikeBuyer {No,Yes}
+
+@data
+Single,Male,1,Manual,No,0,'0-1 Miles',40-54,No
+Single,Female,1,Manual,Yes,1,'0-1 Miles',40-54,No
+Married,Female,1,Manual,Yes,1,'0-1 Miles',40-54,No
+Married,Male,1,Clerical,Yes,1,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,No,1,'2-5 Miles',25-39,No
+Single,Female,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Female,0,Manual,No,0,'0-1 Miles',40-54,No
+Married,Female,0,Manual,Yes,0,'0-1 Miles',40-54,No
+Single,Female,0,Clerical,Yes,0,'0-1 Miles',40-54,No
+Single,Male,0,Manual,Yes,1,'0-1 Miles',55-69,No
+Married,Female,0,Manual,No,0,'0-1 Miles',55-69,No
+Single,Female,1,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Male,1,Clerical,No,1,'0-1 Miles',25-39,No
+Married,Female,1,Clerical,Yes,1,'1-2 Miles',25-39,No
+Single,Female,0,Clerical,No,1,'1-2 Miles',40-54,No
+Single,Male,0,Clerical,Yes,1,'1-2 Miles',40-54,No
+Single,Male,0,'Skilled Manual',No,1,'0-1 Miles',40-54,No
+Married,Female,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,No
+Married,Female,0,Clerical,Yes,1,'0-1 Miles',40-54,No
+Married,Female,0,Clerical,No,1,'0-1 Miles',40-54,No
+Married,Male,0,'Skilled Manual',No,0,'0-1 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,0,'0-1 Miles',25-39,No
+Married,Female,0,Professional,Yes,0,'2-5 Miles',40-54,No
+Single,Male,1,Manual,No,1,'0-1 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'2-5 Miles',40-54,No
+Single,Female,1,Professional,Yes,1,'2-5 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Single,Female,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Married,Female,0,Manual,No,1,'0-1 Miles',25-39,No
+Married,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Male,1,Clerical,No,1,'0-1 Miles',25-39,No
+Married,Male,1,Clerical,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,'Skilled Manual',No,0,'0-1 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,0,'0-1 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Female,0,Clerical,Yes,1,'1-2 Miles',40-54,No
+Single,Female,1,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Male,1,Clerical,No,1,'0-1 Miles',40-54,No
+Married,Female,1,Clerical,Yes,1,'1-2 Miles',40-54,No
+Married,Male,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'0-1 Miles',40-54,No
+Married,Female,0,'Skilled Manual',Yes,0,'1-2 Miles',25-39,No
+Married,Male,1,'Skilled Manual',Yes,1,'10+ Miles',25-39,No
+Married,Male,1,'Skilled Manual',Yes,0,'2-5 Miles',40-54,No
+Married,Male,1,Professional,Yes,1,'10+ Miles',40-54,No
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Single,Female,1,Professional,No,1,'5-10 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'10+ Miles',40-54,No
+Married,Male,1,Professional,Yes,1,'10+ Miles',40-54,No
+Single,Female,1,Professional,Yes,1,'10+ Miles',40-54,No
+Single,Female,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Female,1,Management,Yes,1,'10+ Miles',55-69,No
+Single,Male,0,'Skilled Manual',No,1,'5-10 Miles',55-69,No
+Married,Male,0,Professional,Yes,1,'10+ Miles',25-39,No
+Married,Female,0,Professional,Yes,1,'10+ Miles',25-39,No
+Married,Female,1,Management,Yes,1,'10+ Miles',25-39,No
+Married,Male,0,Professional,Yes,1,'10+ Miles',25-39,No
+Single,Female,0,Professional,No,1,'10+ Miles',25-39,No
+Single,Male,0,Professional,No,1,'10+ Miles',25-39,No
+Single,Male,0,Professional,No,1,'1-2 Miles',55-69,No
+Single,Male,0,Professional,Yes,1,'5-10 Miles',55-69,No
+Single,Female,0,Professional,Yes,1,'5-10 Miles',55-69,No
+Single,Female,0,Professional,Yes,1,'5-10 Miles',55-69,No
+Single,Female,0,Professional,No,1,'1-2 Miles',55-69,No
+Married,Male,0,Management,Yes,1,'10+ Miles',55-69,No
+Single,Female,0,Management,No,1,'1-2 Miles',55-69,No
+Married,Female,0,Management,Yes,1,'10+ Miles',55-69,No
+Single,Male,0,Management,Yes,1,'10+ Miles',55-69,No
+Single,Female,1,Professional,No,1,'2-5 Miles',55-69,No
+Single,Female,1,Management,No,1,'10+ Miles',55-69,No
+Married,Female,1,Management,Yes,1,'10+ Miles',55-69,No
+Single,Male,1,Professional,Yes,1,'10+ Miles',55-69,No
+Single,Male,1,Professional,No,1,'2-5 Miles',55-69,No
+Married,Female,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Male,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Male,0,Management,Yes,1,'1-2 Miles',25-39,No
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,Professional,Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,Clerical,No,1,'1-2 Miles',40-54,No
+Single,Male,1,Manual,No,1,'1-2 Miles',40-54,No
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Male,0,Professional,No,1,'1-2 Miles',25-39,No
+Married,Female,1,Management,Yes,1,'2-5 Miles',40-54,No
+Single,Male,1,Management,No,1,'0-1 Miles',40-54,No
+Married,Male,0,Professional,Yes,1,'5-10 Miles',25-39,No
+Married,Female,1,Management,Yes,1,'0-1 Miles',40-54,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Female,1,'Skilled Manual',Yes,1,'2-5 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'2-5 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'10+ Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'2-5 Miles',40-54,No
+Single,Female,1,Management,No,1,'0-1 Miles',40-54,No
+Single,Male,0,Management,Yes,1,'5-10 Miles',70-84,No
+Single,Male,1,Management,No,1,'1-2 Miles',40-54,No
+Single,Female,1,Management,No,1,'1-2 Miles',40-54,No
+Single,Female,1,Professional,No,1,'1-2 Miles',40-54,No
+Single,Female,1,Professional,No,1,'1-2 Miles',40-54,No
+Married,Female,1,Professional,Yes,0,'1-2 Miles',40-54,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Male,0,Professional,No,1,'1-2 Miles',55-69,No
+Married,Female,0,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,0,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,0,Professional,Yes,1,'5-10 Miles',55-69,No
+Married,Female,0,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,0,Professional,No,1,'1-2 Miles',55-69,No
+Married,Male,1,Professional,No,1,'5-10 Miles',40-54,No
+Single,Female,0,Professional,No,1,'1-2 Miles',40-54,No
+Single,Female,0,Professional,No,1,'5-10 Miles',40-54,No
+Single,Male,1,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Married,Male,1,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Married,Male,1,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'5-10 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Married,Female,1,'Skilled Manual',Yes,1,'10+ Miles',40-54,No
+Married,Male,1,Manual,Yes,1,'0-1 Miles',40-54,No
+Single,Male,1,Manual,Yes,1,'0-1 Miles',40-54,No
+Single,Male,1,Manual,Yes,1,'0-1 Miles',40-54,No
+Single,Female,1,Clerical,No,0,'0-1 Miles',40-54,No
+Married,Male,1,Management,No,1,'10+ Miles',25-39,No
+Single,Male,0,Manual,No,1,'2-5 Miles',25-39,No
+Single,Female,0,Manual,No,1,'0-1 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Female,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,No,0,'0-1 Miles',70-84,No
+Single,Female,0,Manual,No,0,'0-1 Miles',55-69,No
+Single,Female,0,Manual,No,1,'2-5 Miles',55-69,No
+Single,Male,1,Manual,No,1,'2-5 Miles',40-54,No
+Single,Male,1,Manual,No,1,'2-5 Miles',40-54,No
+Married,Female,1,Manual,No,1,'1-2 Miles',25-39,No
+Married,Male,1,Manual,No,1,'1-2 Miles',25-39,No
+Single,Male,1,Manual,No,0,'0-1 Miles',25-39,No
+Single,Female,0,Professional,No,1,'5-10 Miles',40-54,No
+Single,Female,0,'Skilled Manual',No,1,'5-10 Miles',25-39,No
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'10+ Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'10+ Miles',40-54,No
+Single,Female,1,Professional,No,1,'5-10 Miles',40-54,No
+Married,Male,1,Professional,No,1,'5-10 Miles',55-69,No
+Married,Male,0,Professional,Yes,1,'10+ Miles',25-39,No
+Single,Female,1,Professional,No,1,'0-1 Miles',40-54,No
+Single,Female,1,Professional,No,1,'10+ Miles',40-54,No
+Single,Female,1,Professional,No,1,'10+ Miles',55-69,No
+Married,Female,1,Management,Yes,1,'10+ Miles',55-69,No
+Single,Female,1,Management,Yes,1,'10+ Miles',55-69,No
+Married,Male,0,Professional,Yes,1,'10+ Miles',25-39,No
+Single,Male,0,Professional,Yes,1,'10+ Miles',25-39,No
+Married,Female,0,Professional,No,1,'10+ Miles',25-39,No
+Married,Female,0,Professional,No,1,'1-2 Miles',55-69,No
+Single,Male,0,Professional,No,1,'1-2 Miles',55-69,No
+Single,Female,0,Management,No,1,'1-2 Miles',55-69,No
+Single,Female,0,Management,Yes,1,'10+ Miles',55-69,No
+Single,Male,0,Management,No,1,'1-2 Miles',55-69,No
+Single,Male,0,Management,Yes,1,'10+ Miles',55-69,No
+Single,Male,0,Clerical,No,1,'10+ Miles',55-69,No
+Married,Female,0,Professional,Yes,1,'10+ Miles',55-69,No
+Single,Female,0,Professional,No,1,'2-5 Miles',55-69,No
+Married,Female,1,Professional,No,1,'2-5 Miles',55-69,No
+Married,Female,1,Professional,No,1,'2-5 Miles',55-69,No
+Married,Female,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Male,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Female,1,'Skilled Manual',Yes,1,'10+ Miles',55-69,No
+Single,Male,1,Professional,Yes,1,'10+ Miles',55-69,No
+Married,Male,1,'Skilled Manual',Yes,1,'10+ Miles',40-54,No
+Married,Female,1,'Skilled Manual',Yes,1,'10+ Miles',40-54,No
+Single,Male,1,Management,No,1,'10+ Miles',25-39,No
+Single,Female,0,Management,Yes,1,'1-2 Miles',25-39,No
+Single,Male,0,Management,No,1,'0-1 Miles',25-39,No
+Single,Male,1,Management,No,1,'1-2 Miles',25-39,No
+Married,Male,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,1,'Skilled Manual',No,1,'0-1 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Married,Male,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,Management,No,1,'0-1 Miles',40-54,No
+Single,Male,0,Management,No,1,'0-1 Miles',40-54,No
+Single,Female,0,Professional,No,1,'2-5 Miles',40-54,No
+Married,Female,1,Professional,Yes,0,'2-5 Miles',40-54,No
+Married,Male,1,Professional,Yes,0,'2-5 Miles',40-54,No
+Married,Male,1,Professional,No,1,'10+ Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',40-54,No
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Female,1,Management,No,1,'1-2 Miles',40-54,No
+Married,Female,1,Management,Yes,1,'2-5 Miles',40-54,No
+Single,Male,1,Professional,No,1,'0-1 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'2-5 Miles',40-54,No
+Single,Male,1,Professional,No,1,'0-1 Miles',40-54,No
+Married,Female,1,Management,Yes,1,'0-1 Miles',40-54,No
+Single,Male,1,Management,No,1,'0-1 Miles',40-54,No
+Single,Male,1,Professional,No,1,'2-5 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Single,Female,1,Management,No,1,'2-5 Miles',40-54,No
+Single,Male,0,'Skilled Manual',No,1,'1-2 Miles',40-54,No
+Married,Female,0,Professional,Yes,1,'5-10 Miles',70-84,No
+Single,Female,0,Management,Yes,1,'5-10 Miles',70-84,No
+Single,Male,0,'Skilled Manual',No,1,'1-2 Miles',40-54,No
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Male,1,Professional,No,0,'0-1 Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Female,0,'Skilled Manual',No,1,'0-1 Miles',25-39,No
+Married,Female,0,'Skilled Manual',No,1,'0-1 Miles',25-39,No
+Married,Female,0,'Skilled Manual',No,1,'0-1 Miles',25-39,No
+Married,Female,0,Clerical,No,1,'0-1 Miles',55-69,No
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,1,'5-10 Miles',25-39,No
+Married,Male,1,'Skilled Manual',Yes,1,'2-5 Miles',40-54,No
+Married,Female,1,'Skilled Manual',Yes,1,'2-5 Miles',40-54,No
+Married,Female,0,Professional,No,0,'0-1 Miles',40-54,No
+Single,Female,1,Manual,No,0,'0-1 Miles',40-54,No
+Single,Male,1,Manual,No,0,'0-1 Miles',40-54,No
+Single,Male,1,Clerical,No,0,'0-1 Miles',40-54,No
+Married,Male,1,Clerical,Yes,1,'0-1 Miles',40-54,No
+Married,Female,0,Manual,No,1,'1-2 Miles',25-39,No
+Single,Male,0,Manual,Yes,1,'2-5 Miles',25-39,No
+Single,Female,1,Clerical,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Clerical,No,1,'2-5 Miles',25-39,No
+Single,Female,0,Manual,No,1,'5-10 Miles',25-39,No
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Clerical,No,1,'0-1 Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Married,Female,0,Manual,No,0,'0-1 Miles',40-54,No
+Single,Female,0,Manual,No,0,'0-1 Miles',40-54,No
+Married,Female,0,Manual,Yes,0,'0-1 Miles',40-54,No
+Single,Female,0,Professional,No,0,'0-1 Miles',40-54,No
+Married,Female,0,Clerical,No,0,'0-1 Miles',40-54,No
+Single,Male,0,Manual,Yes,0,'0-1 Miles',40-54,No
+Married,Male,0,Manual,Yes,0,'1-2 Miles',40-54,No
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,Yes,0,'0-1 Miles',40-54,No
+Married,Female,0,Manual,Yes,0,'1-2 Miles',40-54,No
+Single,Male,0,Clerical,No,0,'0-1 Miles',55-69,No
+Single,Male,0,Manual,No,1,'0-1 Miles',55-69,No
+Single,Female,1,Manual,No,1,'1-2 Miles',40-54,No
+Married,Female,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Single,Male,0,Professional,No,1,'0-1 Miles',70-84,No
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Married,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Single,Female,0,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,No
+Married,Male,0,'Skilled Manual',No,0,'0-1 Miles',40-54,No
+Single,Female,0,'Skilled Manual',No,0,'0-1 Miles',40-54,No
+Single,Female,0,'Skilled Manual',No,0,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Female,0,Clerical,Yes,1,'1-2 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'1-2 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'1-2 Miles',40-54,No
+Married,Male,0,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Male,0,Clerical,No,1,'1-2 Miles',40-54,No
+Single,Male,1,Clerical,Yes,1,'1-2 Miles',40-54,No
+Single,Female,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,No
+Single,Female,0,'Skilled Manual',Yes,0,'1-2 Miles',25-39,No
+Single,Male,0,'Skilled Manual',Yes,0,'1-2 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,0,'0-1 Miles',25-39,No
+Single,Male,0,Professional,No,1,'0-1 Miles',25-39,No
+Single,Male,1,'Skilled Manual',Yes,0,'2-5 Miles',40-54,No
+Single,Male,0,Professional,No,0,'0-1 Miles',40-54,No
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,No
+Married,Female,1,Professional,No,1,'0-1 Miles',40-54,No
+Single,Female,0,Clerical,No,1,'2-5 Miles',25-39,No
+Single,Female,0,Manual,No,1,'0-1 Miles',25-39,No
+Single,Male,0,Manual,Yes,1,'1-2 Miles',25-39,No
+Married,Male,1,Clerical,Yes,1,'1-2 Miles',25-39,No
+Single,Female,0,Clerical,Yes,1,'1-2 Miles',40-54,No
+Married,Female,1,Clerical,Yes,1,'1-2 Miles',40-54,No
+Single,Male,1,Clerical,Yes,1,'1-2 Miles',40-54,No
+Married,Female,1,Clerical,No,1,'0-1 Miles',40-54,No
+Married,Female,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,No
+Married,Male,0,Clerical,No,1,'0-1 Miles',40-54,No
+Married,Male,0,Clerical,No,1,'0-1 Miles',40-54,No
+Single,Female,0,'Skilled Manual',No,0,'0-1 Miles',25-39,No
+Married,Male,0,'Skilled Manual',Yes,0,'1-2 Miles',25-39,No
+Married,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,No
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,No
+Single,Male,0,Clerical,No,1,'0-1 Miles',25-39,Yes
+Single,Female,1,'Skilled Manual',No,1,'0-1 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,1,'1-2 Miles',40-54,Yes
+Single,Female,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Single,Female,0,Professional,No,1,'2-5 Miles',55-69,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Female,0,Professional,No,1,'0-1 Miles',25-39,Yes
+Married,Female,1,Professional,Yes,1,'1-2 Miles',55-69,Yes
+Married,Female,0,Management,Yes,1,'5-10 Miles',55-69,Yes
+Married,Female,0,Clerical,No,0,'0-1 Miles',25-39,Yes
+Single,Male,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',25-39,Yes
+Single,Female,1,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Single,Male,0,Clerical,No,0,'1-2 Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Management,No,1,'0-1 Miles',25-39,Yes
+Single,Male,0,Manual,No,1,'2-5 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',40-54,Yes
+Married,Female,0,Professional,No,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Manual,Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,0,Manual,No,1,'2-5 Miles',25-39,Yes
+Single,Male,1,Management,No,1,'1-2 Miles',40-54,Yes
+Married,Male,0,Management,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,'Skilled Manual',Yes,0,'2-5 Miles',25-39,Yes
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,Yes
+Married,Male,0,Management,Yes,1,'1-2 Miles',70-84,Yes
+Single,Female,1,Professional,No,1,'0-1 Miles',25-39,Yes
+Single,Male,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Single,Male,0,'Skilled Manual',Yes,0,'1-2 Miles',25-39,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',55-69,Yes
+Married,Male,0,Clerical,No,0,'0-1 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,0,Management,No,1,'0-1 Miles',55-69,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',40-54,Yes
+Single,Male,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Male,1,Clerical,Yes,0,'1-2 Miles',25-39,Yes
+Married,Male,1,Clerical,Yes,0,'2-5 Miles',25-39,Yes
+Married,Female,0,Professional,No,1,'0-1 Miles',40-54,Yes
+Married,Male,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Married,Male,1,Manual,Yes,0,'2-5 Miles',25-39,Yes
+Married,Female,1,Management,Yes,1,'0-1 Miles',25-39,Yes
+Married,Male,1,Management,Yes,1,'10+ Miles',25-39,Yes
+Married,Male,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Female,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,Clerical,Yes,0,'1-2 Miles',25-39,Yes
+Single,Male,0,Professional,No,1,'10+ Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',40-54,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,Yes
+Married,Male,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',40-54,Yes
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Male,0,Professional,No,1,'0-1 Miles',25-39,Yes
+Married,Female,0,Management,No,1,'1-2 Miles',55-69,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',40-54,Yes
+Married,Female,1,Management,No,0,'2-5 Miles',55-69,Yes
+Married,Female,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,Management,No,1,'2-5 Miles',70-84,Yes
+Married,Female,0,Management,Yes,1,'5-10 Miles',70-84,Yes
+Married,Female,1,Professional,No,1,'2-5 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Married,Female,0,Manual,Yes,1,'0-1 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,0,'1-2 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',Yes,0,'1-2 Miles',40-54,Yes
+Married,Female,0,Professional,Yes,1,'5-10 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Married,Male,1,'Skilled Manual',Yes,0,'2-5 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,Yes
+Married,Female,1,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Married,Female,0,Professional,No,0,'0-1 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'0-1 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Married,Male,1,'Skilled Manual',Yes,0,'1-2 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',No,0,'0-1 Miles',40-54,Yes
+Married,Male,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,1,'1-2 Miles',40-54,Yes
+Single,Male,0,Manual,No,1,'1-2 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',No,1,'1-2 Miles',40-54,Yes
+Married,Female,1,Manual,No,0,'1-2 Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Female,0,Manual,No,1,'1-2 Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,1,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',40-54,Yes
+Single,Female,1,'Skilled Manual',No,1,'0-1 Miles',40-54,Yes
+Married,Male,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Single,Female,1,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Single,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',25-39,Yes
+Married,Female,1,Professional,Yes,1,'0-1 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',55-69,Yes
+Married,Female,1,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Female,1,'Skilled Manual',Yes,0,'1-2 Miles',25-39,Yes
+Single,Female,0,Professional,Yes,1,'10+ Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,0,'2-5 Miles',40-54,Yes
+Single,Male,0,Professional,Yes,0,'2-5 Miles',40-54,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Single,Male,1,Professional,No,1,'0-1 Miles',25-39,Yes
+Single,Male,1,Manual,No,1,'1-2 Miles',25-39,Yes
+Married,Female,0,'Skilled Manual',Yes,0,'0-1 Miles',40-54,Yes
+Married,Female,1,Professional,Yes,1,'10+ Miles',25-39,Yes
+Married,Female,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Married,Female,1,Manual,Yes,1,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',40-54,Yes
+Single,Female,1,'Skilled Manual',No,0,'0-1 Miles',25-39,Yes
+Married,Male,0,Professional,No,1,'2-5 Miles',40-54,Yes
+Single,Male,0,Clerical,Yes,1,'5-10 Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',40-54,Yes
+Single,Female,0,Clerical,No,1,'10+ Miles',55-69,Yes
+Single,Male,0,Management,Yes,1,'0-1 Miles',40-54,Yes
+Single,Male,0,Manual,No,1,'2-5 Miles',25-39,Yes
+Married,Male,1,Management,Yes,0,'0-1 Miles',40-54,Yes
+Single,Female,0,Professional,No,1,'2-5 Miles',40-54,Yes
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,Yes
+Single,Male,0,Professional,Yes,0,'2-5 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'10+ Miles',25-39,Yes
+Married,Male,0,Management,No,1,'0-1 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,1,Management,Yes,1,'1-2 Miles',55-69,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Female,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',55-69,Yes
+Single,Male,1,Manual,No,1,'0-1 Miles',25-39,Yes
+Married,Male,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Married,Female,1,Management,Yes,1,'10+ Miles',25-39,Yes
+Single,Male,0,Professional,No,0,'0-1 Miles',25-39,Yes
+Married,Female,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Married,Female,1,'Skilled Manual',Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,'Skilled Manual',Yes,1,'0-1 Miles',25-39,Yes
+Married,Female,1,Professional,No,1,'5-10 Miles',40-54,Yes
+Married,Female,1,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Single,Male,1,Manual,No,0,'0-1 Miles',40-54,Yes
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Married,Male,0,Clerical,No,1,'5-10 Miles',55-69,Yes
+Single,Male,0,Manual,Yes,1,'0-1 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,0,'5-10 Miles',40-54,Yes
+Single,Female,0,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,1,'Skilled Manual',Yes,1,'10+ Miles',40-54,Yes
+Single,Female,1,Clerical,No,1,'0-1 Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Clerical,No,1,'0-1 Miles',25-39,Yes
+Single,Male,0,Clerical,No,0,'0-1 Miles',25-39,Yes
+Single,Male,0,Clerical,No,1,'2-5 Miles',25-39,Yes
+Single,Female,0,Clerical,No,1,'1-2 Miles',40-54,Yes
+Married,Male,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Married,Male,0,Professional,Yes,1,'0-1 Miles',40-54,Yes
+Married,Female,1,Manual,No,1,'0-1 Miles',40-54,Yes
+Married,Male,0,Management,No,1,'0-1 Miles',55-69,Yes
+Married,Male,0,'Skilled Manual',Yes,0,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'0-1 Miles',55-69,Yes
+Married,Female,0,Management,Yes,1,'1-2 Miles',70-84,Yes
+Single,Male,1,Management,Yes,1,'5-10 Miles',40-54,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'1-2 Miles',40-54,Yes
+Single,Male,0,Manual,Yes,0,'0-1 Miles',40-54,Yes
+Married,Female,1,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',55-69,Yes
+Single,Male,1,Management,Yes,1,'10+ Miles',25-39,Yes
+Single,Female,1,Manual,No,0,'0-1 Miles',40-54,Yes
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',55-69,Yes
+Single,Female,0,Professional,No,0,'0-1 Miles',25-39,Yes
+Single,Female,0,Professional,No,0,'0-1 Miles',25-39,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,Professional,No,1,'2-5 Miles',55-69,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'2-5 Miles',40-54,Yes
+Married,Male,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Male,0,'Skilled Manual',No,0,'0-1 Miles',25-39,Yes
+Married,Male,0,Management,Yes,1,'5-10 Miles',55-69,Yes
+Single,Female,1,Management,Yes,1,'5-10 Miles',55-69,Yes
+Married,Female,0,'Skilled Manual',Yes,0,'0-1 Miles',40-54,Yes
+Married,Female,0,Clerical,No,1,'0-1 Miles',25-39,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,0,Clerical,No,0,'0-1 Miles',25-39,Yes
+Married,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'10+ Miles',25-39,Yes
+Married,Female,1,Management,Yes,1,'10+ Miles',25-39,Yes
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Female,1,Clerical,Yes,0,'1-2 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',55-69,Yes
+Single,Female,0,Professional,Yes,0,'2-5 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Married,Male,1,'Skilled Manual',Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,Clerical,Yes,1,'0-1 Miles',25-39,Yes
+Married,Female,1,Professional,Yes,1,'0-1 Miles',40-54,Yes
+Single,Male,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Single,Female,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Single,Female,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Single,Female,1,'Skilled Manual',Yes,0,'0-1 Miles',25-39,Yes
+Married,Female,1,Manual,Yes,0,'2-5 Miles',25-39,Yes
+Single,Female,0,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,0,Management,Yes,1,'2-5 Miles',25-39,Yes
+Single,Female,1,Clerical,Yes,1,'0-1 Miles',25-39,Yes
+Single,Male,0,Manual,Yes,1,'0-1 Miles',40-54,Yes
+Single,Male,1,Manual,Yes,0,'0-1 Miles',40-54,Yes
+Single,Male,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Single,Female,0,Manual,Yes,1,'2-5 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Married,Male,1,Manual,Yes,0,'2-5 Miles',25-39,Yes
+Single,Male,0,Professional,Yes,0,'2-5 Miles',40-54,Yes
+Married,Female,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Single,Female,1,Manual,No,1,'1-2 Miles',40-54,Yes
+Married,Male,0,Professional,Yes,0,'2-5 Miles',40-54,Yes
+Single,Female,0,Clerical,No,0,'0-1 Miles',40-54,Yes
+Married,Female,0,Management,Yes,1,'2-5 Miles',55-69,Yes
+Single,Female,0,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Clerical,Yes,0,'0-1 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,1,Manual,No,0,'0-1 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,1,Management,Yes,1,'0-1 Miles',25-39,Yes
+Married,Female,0,Professional,No,0,'0-1 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'0-1 Miles',40-54,Yes
+Single,Male,1,Professional,No,1,'0-1 Miles',55-69,Yes
+Married,Male,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Female,1,Clerical,Yes,1,'0-1 Miles',25-39,Yes
+Single,Female,1,Clerical,Yes,1,'1-2 Miles',25-39,Yes
+Single,Female,0,Professional,No,1,'5-10 Miles',40-54,Yes
+Married,Male,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,'Skilled Manual',Yes,1,'10+ Miles',40-54,Yes
+Married,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,0,Clerical,Yes,1,'1-2 Miles',40-54,Yes
+Single,Male,0,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Single,Male,1,Management,No,1,'2-5 Miles',40-54,Yes
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Married,Male,1,Clerical,Yes,1,'1-2 Miles',25-39,Yes
+Single,Male,1,'Skilled Manual',Yes,1,'2-5 Miles',25-39,Yes
+Single,Female,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Single,Male,1,'Skilled Manual',No,1,'0-1 Miles',40-54,Yes
+Single,Female,1,Clerical,Yes,1,'0-1 Miles',25-39,Yes
+Single,Male,1,Professional,No,1,'0-1 Miles',40-54,Yes
+Married,Male,1,Management,Yes,1,'10+ Miles',55-69,Yes
+Married,Male,1,Professional,Yes,1,'1-2 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,0,'0-1 Miles',40-54,Yes
+Single,Male,1,Clerical,Yes,0,'1-2 Miles',25-39,Yes
+Single,Male,0,'Skilled Manual',No,0,'1-2 Miles',25-39,Yes
+Single,Female,1,'Skilled Manual',No,0,'0-1 Miles',25-39,Yes
+Single,Male,1,Clerical,Yes,1,'0-1 Miles',40-54,Yes
+Married,Female,0,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,0,Manual,Yes,1,'1-2 Miles',40-54,Yes
+Single,Female,1,Manual,Yes,0,'0-1 Miles',40-54,Yes
+Single,Female,0,Management,No,1,'0-1 Miles',40-54,Yes
+Married,Female,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,0,'0-1 Miles',40-54,Yes
+Single,Male,0,Manual,No,1,'0-1 Miles',25-39,Yes
+Single,Female,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Married,Female,0,Manual,Yes,1,'2-5 Miles',40-54,Yes
+Single,Female,1,'Skilled Manual',Yes,1,'5-10 Miles',40-54,Yes
+Single,Male,1,Manual,Yes,0,'0-1 Miles',40-54,Yes
+Single,Male,0,Manual,Yes,1,'1-2 Miles',25-39,Yes
+Married,Female,1,Management,Yes,1,'0-1 Miles',55-69,Yes
+Married,Male,1,Professional,Yes,1,'2-5 Miles',25-39,Yes
+Single,Female,1,Manual,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,0,Professional,Yes,1,'2-5 Miles',40-54,Yes
+Single,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Male,0,Clerical,No,1,'5-10 Miles',40-54,Yes
+Married,Male,0,Clerical,No,0,'0-1 Miles',25-39,Yes
+Married,Female,0,Manual,Yes,1,'0-1 Miles',40-54,Yes
+Single,Male,1,Clerical,Yes,1,'1-2 Miles',25-39,Yes
+Single,Female,0,'Skilled Manual',Yes,1,'5-10 Miles',25-39,Yes
+Married,Female,0,'Skilled Manual',No,1,'1-2 Miles',25-39,Yes
+Single,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,0,Professional,Yes,1,'5-10 Miles',25-39,Yes
+Single,Male,1,'Skilled Manual',No,0,'0-1 Miles',25-39,Yes
+Married,Male,0,Clerical,Yes,0,'0-1 Miles',25-39,Yes
+Married,Female,0,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Married,Female,1,Management,Yes,1,'0-1 Miles',25-39,Yes
+Married,Male,0,Professional,No,1,'1-2 Miles',40-54,Yes
+Married,Female,0,Professional,Yes,1,'0-1 Miles',40-54,Yes
+Single,Male,0,Professional,No,1,'1-2 Miles',25-39,Yes
+Single,Female,0,Clerical,No,1,'5-10 Miles',25-39,Yes
+Married,Male,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Married,Male,1,Professional,Yes,1,'5-10 Miles',40-54,Yes
+Single,Female,1,Professional,No,1,'0-1 Miles',40-54,Yes
+Single,Female,0,Professional,No,0,'0-1 Miles',25-39,Yes
+Married,Male,1,Manual,Yes,1,'1-2 Miles',40-54,Yes
+Single,Male,1,Management,Yes,1,'10+ Miles',25-39,Yes
+Married,Male,0,Professional,Yes,0,'0-1 Miles',25-39,Yes
+Married,Female,1,'Skilled Manual',Yes,0,'1-2 Miles',25-39,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',No,1,'0-1 Miles',25-39,Yes
+Married,Male,1,'Skilled Manual',Yes,0,'2-5 Miles',25-39,Yes
+Single,Female,1,Professional,No,0,'0-1 Miles',40-54,Yes
+Married,Male,0,'Skilled Manual',Yes,1,'0-1 Miles',40-54,Yes
+Single,Female,1,Clerical,Yes,1,'5-10 Miles',55-69,Yes
+Single,Female,0,Professional,No,1,'10+ Miles',25-39,Yes
