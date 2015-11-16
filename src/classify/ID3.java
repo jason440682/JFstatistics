@@ -287,6 +287,11 @@ public class ID3 {
 		return most;
 	}
 	
+	//使用已经存在的决策树模型
+	public void readModel(){
+		
+	}
+	
 	public static void main(String[] args) throws IOException {
 		
 		ID3 id3=new ID3();
