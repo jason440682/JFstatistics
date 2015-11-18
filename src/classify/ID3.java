@@ -1,19 +1,15 @@
 package classify;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+
+import read.ReadData;
 import tree.BTree;
 import tree.TreeNode;
 
@@ -21,64 +17,28 @@ public class ID3 {
     //定义：生成多叉树
 	private List<String> attribute=new LinkedList<String>();  //属性链表
 	private HashMap<String,String[]> att_val=new HashMap<String,String[]>(); //各属性的取值
-	private List<String[]> data=new LinkedList<String[]>();  //训练集元祖数据
-	private List<String[]> test=new LinkedList<String[]>();
+	private List<ArrayList<String>> data=new LinkedList<ArrayList<String>>();  //训练集元祖数据
+	private List<ArrayList<String>> test=new LinkedList<ArrayList<String>>();
 	private int label;
 	private String label_s;
 	
 	public BTree tree=new BTree();
 	
-	
-	public List<String[]> readTest(String path) throws Exception{
-		boolean isData=false;  
-		FileReader file=new FileReader(path); 
-		BufferedReader br=new BufferedReader(file);
-		String line=br.readLine();
-		while(line!=null){
-			if(line.contains("@data")){
-				isData=true;
-				line=br.readLine();
-				continue;
-			}
-			if(isData){
-				String[] row=line.split(",");
-				test.add(row);			
-			}
-			line=br.readLine();
-		}
-		br.close();
+	//读取测试集
+	public List<ArrayList<String>> readTest(String path) throws Exception{
+		ReadData rdata=new ReadData();
+		rdata.readArff(path);
+		this.test=rdata.getData();
 		return this.test;
 	}
-	public void  readArff(String path) throws IOException{   //数 入为数据文件路径
-		boolean isData=false;    //判断下面的行是否为元数据
-
-		Pattern pattern=Pattern.compile("@attribute\\s?(\\S+)\\s?[{]([\\s\\S]+)[}]");//匹配属性
-
-		FileReader file=new FileReader(path); 
-		BufferedReader br=new BufferedReader(file);
-		
-		String line=br.readLine();
-		while(line!=null){
-			if(line.contains("@data")){
-				isData=true;
-				line=br.readLine();
-				continue;
-			}
-			if(isData){
-				String[] row=line.split(",");
-				data.add(row);
-			}else{
-				Matcher matcher=pattern.matcher(line);
-				if(matcher.find()){
-					String[] value=matcher.group(2).split(",");
-					attribute.add(matcher.group(1));
-					att_val.put(matcher.group(1),value);
-				}
-			}
-			line=br.readLine();
-			
-		}
-		br.close();		
+	
+	//读取测试集
+	public void  readTrain(String path) throws IOException{   //数 入为数据文件路径
+		ReadData rdata=new ReadData();
+		rdata.readArff(path);
+		this.attribute=rdata.getArrtibute();
+		this.att_val=rdata.getAttVal();
+		this.data=rdata.getData();
 	}
 	
 	public void setLabel(int i){
@@ -99,15 +59,14 @@ public class ID3 {
 	private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
 		double entropy=0.0;
 		if(sub.size()==0) return entropy;
-		String s_label=this.attribute.get(label);
-		String[] label_v=this.att_val.get(s_label);
+		String[] label_v=this.att_val.get(this.label_s);
 		int len=label_v.length;
 		int[] count=new int[len];
 		Arrays.fill(count,0);  //初始化为零
 		
 		for(int i=0;i<sub.size();i++){
 			for(int j=0;j<len;j++){
-				if(this.data.get(sub.get(i))[label].equals(label_v[j])){
+				if(this.data.get(sub.get(i)).get(label).equals(label_v[j])){   //取label
 					count[j]++;
 				}
 			}
@@ -127,7 +86,7 @@ public class ID3 {
 			TreeNode[] c_a=new TreeNode[1];
 			TreeNode left=new TreeNode();
 			left.attribute="label";
-			left.value=this.data.get(0)[this.label];;
+			left.value=this.data.get(0).get(this.label);;
 			c_a[0]=left;
 			node.child_array=c_a;	
 			return;   //如果类标相同，则返回
@@ -166,7 +125,7 @@ public class ID3 {
 			
 			for(int k=0;k<sub.size();k++){
 				ind=att_ind.get(i);
-				String c_value=this.data.get(sub.get(k))[ind];  //当前属性值,ind为对于属性索引
+				String c_value=this.data.get(sub.get(k)).get(ind);  //当前属性值,ind为对于属性索引
 				int count=count_map.get(c_value)+1;
 				count_map.put(c_value, count);
 				
@@ -217,7 +176,7 @@ public class ID3 {
 		
 	}
 	
-	public void doWork(){
+	public List<ArrayList<String>> predict(){
 		ArrayList<Integer> all=new ArrayList<Integer>();   //元组索引
 		for(int i=0;i<this.data.size();i++){
 			all.add(i);
@@ -230,6 +189,41 @@ public class ID3 {
 		
 		buildDT(this.tree.root,all,att_index);
 		//printDT(this.tree.root,0);
+		
+		int right=0;
+        
+        
+        List<String> pre=new LinkedList<String>();
+		for(int i=0;i<test.size();i++){
+			TreeNode p=this.tree.root;
+			while(p.attribute!="label"){
+				String c_att=p.child_array[0].attribute;
+				if(c_att=="label"){
+					p=p.child_array[0];
+				}else{
+					int ind=this.attribute.indexOf(c_att);
+					String val=test.get(i).get(ind);		
+					for(int j=0;j<p.child_array.length;j++){				
+						if(val.equals(p.child_array[j].value)){
+							p=p.child_array[j];
+							break;
+						}
+					}
+				}									
+			}
+			pre.add(p.value);
+			test.get(i).add(p.value);
+			if(p.value.equals(test.get(i).get(label))){
+				right++;
+			}
+		}
+		
+		for(int j=0;j<pre.size();j++){
+			System.out.println("real:"+test.get(j).get(8)+" pre:"+pre.get(j));
+		}
+		System.out.println("正确:"+right+" 总共:"+test.size());
+		return this.test;
+		
 	}
 	
 	private void printDT(TreeNode node,int plies){
@@ -250,9 +244,9 @@ public class ID3 {
 	}
 	
 	private boolean sameLabel(ArrayList<Integer> sub){  //检查该子集类标是否相同
-		String check=this.data.get(0)[this.label];
+		String check=this.data.get(0).get(this.label);
 		for(int i=1;i<sub.size();i++){
-			if(!check.equals(this.data.get(sub.get(i))[this.label])){
+			if(!check.equals(this.data.get(sub.get(i)).get(this.label))){
 				return false;
 			}
 		}
@@ -269,7 +263,7 @@ public class ID3 {
 		}
 		
 		for(int j=0;j<sub.size();j++){
-			String cur_val=this.data.get(sub.get(j))[this.label];
+			String cur_val=this.data.get(sub.get(j)).get(this.label);
 			int count=label_map.get(cur_val)+1;
 			label_map.put(cur_val,count);
 		}
@@ -292,13 +286,7 @@ public class ID3 {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		
-		ID3 id3=new ID3();
-		id3.readArff("data/Test.arff");
-		id3.setLabel(8);    
-		id3.doWork();
-		
-	}
+	
+	
 
 }
