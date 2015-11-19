@@ -1,61 +1,21 @@
 package classify;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-
-import read.ReadData;
+import modeling.Modeling;
 import tree.BTree;
 import tree.TreeNode;
 
-public class ID3 {
+public class ID3 extends Modeling {
     //定义：生成多叉树
-	private List<String> attribute=new LinkedList<String>();  //属性链表
-	private HashMap<String,String[]> att_val=new HashMap<String,String[]>(); //各属性的取值
-	private List<ArrayList<String>> data=new LinkedList<ArrayList<String>>();  //训练集元祖数据
-	private List<ArrayList<String>> test=new LinkedList<ArrayList<String>>();
-	private int label;
-	private String label_s;
-	
 	public BTree tree=new BTree();
 	
-	//读取测试集
-	public List<ArrayList<String>> readTest(String path) throws Exception{
-		ReadData rdata=new ReadData();
-		rdata.readArff(path);
-		this.test=rdata.getData();
-		return this.test;
-	}
-	
-	//读取测试集
-	public void  readTrain(String path) throws IOException{   //数 入为数据文件路径
-		ReadData rdata=new ReadData();
-		rdata.readArff(path);
-		this.attribute=rdata.getArrtibute();
-		this.att_val=rdata.getAttVal();
-		this.data=rdata.getData();
-	}
-	
-	public void setLabel(int i){
-		this.label=i;
-	}
-	public void setLabel(String label_s){
-		this.label_s=label_s;
-		for(int i=0;i<this.attribute.size();i++){
-			if(label_s.equals(attribute.get(i))){
-				this.label=i;
-				break;
-			}
-		}
-	}
-	
-	
-	
+
 	private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
 		double entropy=0.0;
 		if(sub.size()==0) return entropy;
@@ -66,7 +26,7 @@ public class ID3 {
 		
 		for(int i=0;i<sub.size();i++){
 			for(int j=0;j<len;j++){
-				if(this.data.get(sub.get(i)).get(label).equals(label_v[j])){   //取label
+				if(this.train.get(sub.get(i)).get(label).equals(label_v[j])){   //取label
 					count[j]++;
 				}
 			}
@@ -86,7 +46,7 @@ public class ID3 {
 			TreeNode[] c_a=new TreeNode[1];
 			TreeNode left=new TreeNode();
 			left.attribute="label";
-			left.value=this.data.get(0).get(this.label);;
+			left.value=this.train.get(0).get(this.label);;
 			c_a[0]=left;
 			node.child_array=c_a;	
 			return;   //如果类标相同，则返回
@@ -125,7 +85,7 @@ public class ID3 {
 			
 			for(int k=0;k<sub.size();k++){
 				ind=att_ind.get(i);
-				String c_value=this.data.get(sub.get(k)).get(ind);  //当前属性值,ind为对于属性索引
+				String c_value=this.train.get(sub.get(k)).get(ind);  //当前属性值,ind为对于属性索引
 				int count=count_map.get(c_value)+1;
 				count_map.put(c_value, count);
 				
@@ -178,7 +138,7 @@ public class ID3 {
 	
 	public List<ArrayList<String>> predict(){
 		ArrayList<Integer> all=new ArrayList<Integer>();   //元组索引
-		for(int i=0;i<this.data.size();i++){
+		for(int i=0;i<this.train.size();i++){
 			all.add(i);
 		}
 		
@@ -221,7 +181,7 @@ public class ID3 {
 		for(int j=0;j<pre.size();j++){
 			System.out.println("real:"+test.get(j).get(8)+" pre:"+pre.get(j));
 		}
-		System.out.println("正确:"+right+" 总共:"+test.size());
+		System.out.println("正确:"+right+" 总共:"+test.size()+" 准确率:"+(double)right/test.size());
 		return this.test;
 		
 	}
@@ -244,9 +204,9 @@ public class ID3 {
 	}
 	
 	private boolean sameLabel(ArrayList<Integer> sub){  //检查该子集类标是否相同
-		String check=this.data.get(0).get(this.label);
+		String check=this.train.get(0).get(this.label);
 		for(int i=1;i<sub.size();i++){
-			if(!check.equals(this.data.get(sub.get(i)).get(this.label))){
+			if(!check.equals(this.train.get(sub.get(i)).get(this.label))){
 				return false;
 			}
 		}
@@ -263,7 +223,7 @@ public class ID3 {
 		}
 		
 		for(int j=0;j<sub.size();j++){
-			String cur_val=this.data.get(sub.get(j)).get(this.label);
+			String cur_val=this.train.get(sub.get(j)).get(this.label);
 			int count=label_map.get(cur_val)+1;
 			label_map.put(cur_val,count);
 		}
