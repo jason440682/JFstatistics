@@ -21,15 +21,30 @@ public class Rule extends Modeling{
 		for(int i=0;i<lab.length-2;i++){   //频率最高的类做默认类
 			while(){
 				ArrayList<String[]> r=learnRule(lab[i],all);
-	            delCover(all);
+	            delCover(all,r);
 	            rule.add(r);
 			}
 		}
 		
 	}
 	
-	private void delCover(ArrayList<Integer> sub){
-		
+	private void delCover(ArrayList<Integer> sub,ArrayList<String[]> r){
+		for(int i=0;i<sub.size();i++){
+			boolean match=true;
+			for(int j=0;j<r.size();j++){
+				String att=r.get(j)[0];
+				String val=r.get(j)[1];
+				int ind=attribute.indexOf(att);
+				if(!this.train.get(sub.get(i)).get(ind).equals(val)){
+					//不相等
+					match=false;
+				}
+			}
+			if(match){
+				sub.remove(i);
+				i--;
+			}
+		}
 	}
 	
 	
