@@ -9,8 +9,12 @@ import modeling.Modeling;
 
 
 public class Rule extends Modeling{
-	private List<ArrayList<String[]>> rule=new LinkedList<ArrayList<String[]>>();
+	public List<ArrayList<String[]>> rule=new LinkedList<ArrayList<String[]>>();
 	//规则的每一项由String[]表示    String[0]为属性，String[1]为取值
+	
+	public void predict(){
+		buildRule();
+	}
 	
 	private void buildRule(){
 		ArrayList<Integer> all=new ArrayList<Integer>();   //元组索引
@@ -19,13 +23,23 @@ public class Rule extends Modeling{
 		}
 		String[] lab=sortLabel();
 		for(int i=0;i<lab.length-2;i++){   //频率最高的类做默认类
-			while(){
+			while(havePos(all,lab[i])){    //有正类的时候
 				ArrayList<String[]> r=learnRule(lab[i],all);
 	            delCover(all,r);
 	            rule.add(r);
 			}
 		}
 		
+	}
+	
+	private boolean havePos(ArrayList<Integer> sub,String pos){
+		for(int i=0;i<sub.size();i++){
+			int ind=sub.get(i);
+			if(train.get(ind).get(label).equals(pos)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void delCover(ArrayList<Integer> sub,ArrayList<String[]> r){
@@ -78,15 +92,24 @@ public class Rule extends Modeling{
 	private ArrayList<String[]> learnRule(String pos,ArrayList<Integer> sub){   //传入类，则正例
 		ArrayList<String[]> r=new ArrayList<String[]>();
 		int p1=0; //增加规则前正类个数
-		for(int i=0;i<this.train.size();i++){
-			if(train.get(i).get(label).equals(pos)){
+		for(int i=0;i<sub.size();i++){
+			if(train.get(sub.get(i)).get(label).equals(pos)){
 				p1++;
 			}
 		}
+		
+		int p0=0;   //总正类个数
+		for(int i=0;i<this.train.size();i++){
+			if(train.get(i).get(label).equals(pos)){
+				p0++;
+			}
+		}
+		
+		
 		//加入一个新的合取项。顺序遍历属性-值
-		while(什么时候停止合并规则,覆盖负类？){
+		while(descend(r,pos,p0)){    //规则质量下降，则停止增长
 			double max_foil=0.0;
-			String[] max_r;
+			String[] max_r=new String[2];
 			for(int i=0;i<att_val.size();i++){
 				String att=this.attribute.get(i);
 				for(int j=0;j<att_val.get(att).length;j++){
@@ -101,10 +124,73 @@ public class Rule extends Modeling{
 			}
 			r.add(max_r);
 		}
+		r.remove(r.size()-1);
 		
 		return r;
 	}
 	
+	private boolean descend(ArrayList<String[]> r,String pos,int p0){
+		if(r.size()>1){
+			double f1;
+			int p1=0;
+			int n1=0;
+			
+			double f2;
+			int p2=0;
+			int n2=0;
+			
+			for(int i=0;i<train.size();i++){
+				boolean match=true;
+				for(int j=0;j<r.size();j++){
+					String att=r.get(j)[0];
+					String val=r.get(j)[1];
+					int ind=attribute.indexOf(att);
+					if(!this.train.get(i).get(ind).equals(val)){
+						//不相等
+						match=false;
+					}
+				}
+				if(match){
+					if(train.get(i).get(label).equals(pos)){
+						p1++;
+					}else{
+						n1++;
+					}
+				}
+				
+				
+				boolean match2=true;
+				for(int j=0;j<r.size()-1;j++){   //规则减一
+					String att=r.get(j)[0];
+					String val=r.get(j)[1];
+					int ind=attribute.indexOf(att);
+					if(!this.train.get(i).get(ind).equals(val)){
+						//不相等
+						match2=false;
+					}
+				}
+				if(match2){
+					if(train.get(i).get(label).equals(pos)){
+						p1++;
+					}else{
+						n1++;
+					}
+				}
+			}			
+			
+			f1=p1*(Math.log(p1)/Math.log(p1+n1)-Math.log(p0)/Math.log(train.size()));
+			f2=p2*(Math.log(p2)/Math.log(p2+n2)-Math.log(p0)/Math.log(train.size()));
+			if(f1>f2){
+				return false;
+			}else{
+				return true;
+			}
+			
+			
+		}else{
+			return false;
+		}
+	}
 	
 	private boolean pruning(){  //检查是否需要剪枝。
 		
@@ -126,7 +212,7 @@ public class Rule extends Modeling{
 			     }
 			}			
 		}
-		FOIL_gain=posNum*(Math.log(posNum/(sub.size()))/Math.log(2)-Math.log(p/(p+n))/Math.log(2));
+		FOIL_gain=p*(Math.log(p/(p+n))/Math.log(2)-Math.log(posNum/sub.size())/Math.log(2));
 		return FOIL_gain;
 	}
 }
