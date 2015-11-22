@@ -11,7 +11,7 @@ import read.ReadData;
 
 //建模父类
 public class Modeling {
-	public List<String> attribute=new LinkedList<String>();  //属性链表
+	public LinkedList<String> attribute=new LinkedList<String>();  //属性链表
 	public HashMap<String,String[]> att_val=new HashMap<String,String[]>(); //各属性的取值
 	public List<ArrayList<String>> train=new LinkedList<ArrayList<String>>();  //训练集元祖数据
 	public List<ArrayList<String>> test=new LinkedList<ArrayList<String>>();

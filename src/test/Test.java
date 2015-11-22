@@ -22,17 +22,7 @@ public class Test {
 		rule.setLabel("BikeBuyer");    
 		rule.readTest("data/Test.arff");
 		rule.predict();
-		List<ArrayList<String[]>> r=rule.rule;
-		if(r.size()==0){
-			System.out.println("here");
-		}
-		for(int i=0;i<r.size();i++){
-			System.out.println("here");
-			for(int j=0;j<r.get(i).size();j++){
-				System.out.print("  att:"+r.get(i).get(j)[0]+"　val:"+r.get(i).get(j)[1]);
-			}
-			System.out.println(" ");
-		}
+		
 	}
 
 }

@@ -11,17 +11,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReadData {
-	private List<String> attribute=new LinkedList<String>();  //属性链表
+	private LinkedList<String> attribute=new LinkedList<String>();  //属性链表
 	private HashMap<String,String[]> att_val=new HashMap<String,String[]>(); //各属性的取值
-	private List<ArrayList<String>> data=new LinkedList<ArrayList<String>>();  //训练集元祖数据
+	private LinkedList<ArrayList<String>> data=new LinkedList<ArrayList<String>>();  //训练集元祖数据
 	
-	public List<String> getArrtibute(){
+	public LinkedList<String> getArrtibute(){
 		return this.attribute;
 	}
 	public HashMap<String,String[]> getAttVal(){
 		return this.att_val;
 	}
-	public List<ArrayList<String>> getData(){
+	public LinkedList<ArrayList<String>> getData(){
 		return this.data;
 	}
 	

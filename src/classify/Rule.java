@@ -13,7 +13,30 @@ public class Rule extends Modeling{
 	//规则的每一项由String[]表示    String[0]为属性，String[1]为取值
 	
 	public void predict(){
+		int preRight=0;
 		buildRule();
+		for(int i=0;i<test.size();i++){
+		     if(tempMatch(test.get(i))){
+		    	 if(test.get(i).get(label).equals("Yes")){
+		    		 preRight++;
+		    	 }
+		     }else{
+		    	 if(test.get(i).get(label).equals("No")){
+		    		 preRight++;
+		    	 }
+		     }
+			
+		}
+		System.out.println("preRight:"+preRight+" rate:"+(double)preRight/test.size());
+	}
+	
+	private boolean tempMatch(ArrayList<String> ele){
+		for(int i=0;i<rule.size();i++){
+	        if(matchRule(rule.get(i),ele)){
+	        	return true;
+	        }
+		}
+		return false;
 	}
 	
 	private void buildRule(){
@@ -25,7 +48,7 @@ public class Rule extends Modeling{
 		for(int i=0;i<lab.length-1;i++){   //频率最高的类做默认类
 			while(havePos(all,lab[i])){    //有正类的时候
 				ArrayList<String[]> r=learnRule(lab[i],all);
-	            delCover(all,r);
+				delCover(all,r);
 	            rule.add(r);
 			}
 		}
@@ -83,12 +106,6 @@ public class Rule extends Modeling{
 	
 	private ArrayList<String[]> learnRule(String pos,ArrayList<Integer> sub){   //传入类，则正例
 		ArrayList<String[]> r=new ArrayList<String[]>();
-		int p1=0; //增加规则前正类个数
-		for(int i=0;i<sub.size();i++){
-			if(train.get(sub.get(i)).get(label).equals(pos)){
-				p1++;
-			}
-		}
 		
 		int p0=0;   //总正类个数
 		for(int i=0;i<this.train.size();i++){
@@ -97,23 +114,50 @@ public class Rule extends Modeling{
 			}
 		}
 		
+		int p=0;
+		for(int i=0;i<sub.size();i++){
+			if(train.get(sub.get(i)).get(label).equals(pos)){
+				p++;
+			}
+		}
 		
+		
+		
+		ArrayList<Integer> sub2=(ArrayList<Integer>) sub.clone();
+		LinkedList<String> att2=(LinkedList<String>) attribute.clone();
+		att2.remove(label);
 		//加入一个新的合取项。顺序遍历属性-值
-		while(descend(r,pos,p0)){    //规则质量下降，则停止增长
-			double max_foil=0.0;
+		while(!descend(r,pos,p0)){    //规则质量下降，则停止增长
+			double max_foil=0.0;		
 			String[] max_r=new String[2];
-			for(int i=0;i<att_val.size();i++){
-				String att=this.attribute.get(i);
+			for(int i=0;i<att2.size();i++){
+				String att=att2.get(i);
 				for(int j=0;j<att_val.get(att).length;j++){
 					String val=att_val.get(att)[j];
-					String[] r_add={att,val};
-					double foil=FOIL(p1,sub,r_add,pos);
+					String[] r_add={att,val}; 
+					double foil=FOIL(p,sub2,r_add,pos);
 					if(foil>max_foil){
 						max_foil=foil;;
 						max_r=r_add;
 					}
 				}
 			}
+			
+			for(int j=0;j<sub2.size();j++){
+				String att=max_r[0];
+				String val=max_r[1];
+				p=0;
+				int ind=attribute.indexOf(att);
+				if(train.get(sub2.get(j)).get(ind).equals(val)){
+					if(train.get(sub2.get(j)).get(label).equals(pos)){
+						p++;
+					}
+				}else{
+					sub2.remove(j);
+					j--;
+				}
+			}
+			
 			r.add(max_r);
 		}
 		//r.remove(r.size()-1);
@@ -199,7 +243,12 @@ public class Rule extends Modeling{
 			     }
 			}			
 		}
-		FOIL_gain=p*(Math.log(p/(p+n))/Math.log(2)-Math.log(posNum/sub.size())/Math.log(2));
+		if(p==1)
+		
+		System.out.println("p:"+p+" n:"+n+" posNum:"+posNum+" size:"+sub.size());
+		FOIL_gain=p*(Math.log((double)p/(p+n))/Math.log(2)-Math.log((double)posNum/sub.size())/Math.log(2));
+		System.out.println("foil:"+FOIL_gain);
+		
 		return FOIL_gain;
 	}
 }
