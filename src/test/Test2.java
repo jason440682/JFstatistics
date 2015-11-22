@@ -10,17 +10,16 @@ public class Test2 {
 		l.add(2);
 		l.add(2);
 		l.add(4);
-        for(int i=0;i<l.size();i++){
-        	if(l.get(i)==2){
-        		l.remove(i);
-        		i--;
-        	}
-        }	
         
-        for(int i=0;i<l.size();i++){
-        	
-        	System.out.println(l.get(i)+" size:"+l.size()+" i:"+i);
-        }
+		LinkedList<Integer> b=(LinkedList<Integer>) l.clone();
+		b.remove(1);
+		for(int i=0;i<l.size();i++){
+			System.out.println(l.get(i));
+		}
+		
+		for(int i=0;i<b.size();i++){
+			System.out.println(b.get(i));
+		}
 	}
 
 }

@@ -22,7 +22,7 @@ public class Rule extends Modeling{
 			all.add(i);
 		}
 		String[] lab=sortLabel();
-		for(int i=0;i<lab.length-2;i++){   //频率最高的类做默认类
+		for(int i=0;i<lab.length-1;i++){   //频率最高的类做默认类
 			while(havePos(all,lab[i])){    //有正类的时候
 				ArrayList<String[]> r=learnRule(lab[i],all);
 	            delCover(all,r);
@@ -42,19 +42,11 @@ public class Rule extends Modeling{
 		return false;
 	}
 	
+	
+	
 	private void delCover(ArrayList<Integer> sub,ArrayList<String[]> r){
-		for(int i=0;i<sub.size();i++){
-			boolean match=true;
-			for(int j=0;j<r.size();j++){
-				String att=r.get(j)[0];
-				String val=r.get(j)[1];
-				int ind=attribute.indexOf(att);
-				if(!this.train.get(sub.get(i)).get(ind).equals(val)){
-					//不相等
-					match=false;
-				}
-			}
-			if(match){
+		for(int i=0;i<sub.size();i++){			
+			if(matchRule(r,train.get(sub.get(i)))){
 				sub.remove(i);
 				i--;
 			}
@@ -124,9 +116,21 @@ public class Rule extends Modeling{
 			}
 			r.add(max_r);
 		}
-		r.remove(r.size()-1);
+		//r.remove(r.size()-1);
 		
 		return r;
+	}
+	private boolean matchRule(ArrayList<String[]> r,ArrayList<String> ele){
+		for(int j=0;j<r.size();j++){
+			String att=r.get(j)[0];
+			String val=r.get(j)[1];
+			int ind=attribute.indexOf(att);
+			if(!ele.get(ind).equals(val)){
+				//不相等
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private boolean descend(ArrayList<String[]> r,String pos,int p0){
@@ -140,17 +144,8 @@ public class Rule extends Modeling{
 			int n2=0;
 			
 			for(int i=0;i<train.size();i++){
-				boolean match=true;
-				for(int j=0;j<r.size();j++){
-					String att=r.get(j)[0];
-					String val=r.get(j)[1];
-					int ind=attribute.indexOf(att);
-					if(!this.train.get(i).get(ind).equals(val)){
-						//不相等
-						match=false;
-					}
-				}
-				if(match){
+				
+				if(matchRule(r,train.get(i))){
 					if(train.get(i).get(label).equals(pos)){
 						p1++;
 					}else{
@@ -159,21 +154,13 @@ public class Rule extends Modeling{
 				}
 				
 				
-				boolean match2=true;
-				for(int j=0;j<r.size()-1;j++){   //规则减一
-					String att=r.get(j)[0];
-					String val=r.get(j)[1];
-					int ind=attribute.indexOf(att);
-					if(!this.train.get(i).get(ind).equals(val)){
-						//不相等
-						match2=false;
-					}
-				}
-				if(match2){
+				ArrayList<String[]> r2=(ArrayList<String[]>) r.clone();
+				r2.remove(r2.size()-1);
+				if(matchRule(r2,train.get(i))){
 					if(train.get(i).get(label).equals(pos)){
-						p1++;
+						p2++;
 					}else{
-						n1++;
+						n2++;
 					}
 				}
 			}			
