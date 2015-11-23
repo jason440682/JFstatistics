@@ -114,16 +114,15 @@ public class Rule extends Modeling{
 			}
 		}
 		
+		ArrayList<Integer> sub2=(ArrayList<Integer>) sub.clone();
 		int p=0;
-		for(int i=0;i<sub.size();i++){
-			if(train.get(sub.get(i)).get(label).equals(pos)){
+		for(int i=0;i<sub2.size();i++){
+			if(train.get(sub2.get(i)).get(label).equals(pos)){
 				p++;
 			}
 		}
 		
 		
-		
-		ArrayList<Integer> sub2=(ArrayList<Integer>) sub.clone();
 		LinkedList<String> att2=(LinkedList<String>) attribute.clone();
 		att2.remove(label);
 		//加入一个新的合取项。顺序遍历属性-值
@@ -135,7 +134,7 @@ public class Rule extends Modeling{
 				for(int j=0;j<att_val.get(att).length;j++){
 					String val=att_val.get(att)[j];
 					String[] r_add={att,val}; 
-					double foil=FOIL(p,sub2,r_add,pos);
+					double foil=FOIL(sub2,r_add,pos);
 					if(foil>max_foil){
 						max_foil=foil;;
 						max_r=r_add;
@@ -143,16 +142,12 @@ public class Rule extends Modeling{
 				}
 			}
 			
+			System.out.println(max_foil);
 			for(int j=0;j<sub2.size();j++){
 				String att=max_r[0];
 				String val=max_r[1];
-				p=0;
 				int ind=attribute.indexOf(att);
-				if(train.get(sub2.get(j)).get(ind).equals(val)){
-					if(train.get(sub2.get(j)).get(label).equals(pos)){
-						p++;
-					}
-				}else{
+				if(!train.get(sub2.get(j)).get(ind).equals(val)){				
 					sub2.remove(j);
 					j--;
 				}
@@ -160,7 +155,7 @@ public class Rule extends Modeling{
 			
 			r.add(max_r);
 		}
-		//r.remove(r.size()-1);
+		r.remove(r.size()-1);
 		
 		return r;
 	}
@@ -197,6 +192,10 @@ public class Rule extends Modeling{
 					}
 				}
 				
+				if(n1>p1){
+					System.out.println("here");
+					return true;
+				}
 				
 				ArrayList<String[]> r2=(ArrayList<String[]>) r.clone();
 				r2.remove(r2.size()-1);
@@ -209,8 +208,9 @@ public class Rule extends Modeling{
 				}
 			}			
 			
-			f1=p1*(Math.log(p1)/Math.log(p1+n1)-Math.log(p0)/Math.log(train.size()));
-			f2=p2*(Math.log(p2)/Math.log(p2+n2)-Math.log(p0)/Math.log(train.size()));
+			f1=p1*(Math.log((double)p1/(p1+n1))/Math.log(2)-Math.log((double)p0/train.size())/Math.log(2));
+			f2=p1*(Math.log((double)p2/(p2+n2))/Math.log(2)-Math.log((double)p0/train.size())/Math.log(2));
+			
 			if(f1>f2){
 				return false;
 			}else{
@@ -229,8 +229,16 @@ public class Rule extends Modeling{
 	}
 	
 	//pos为正例  
-	private double FOIL(int posNum,ArrayList<Integer> sub,String[] r_add,String pos){
+	private double FOIL(ArrayList<Integer> sub,String[] r_add,String pos){
 		double FOIL_gain=0.0;    //FOIL信息增益
+		
+		int posNum=0;
+		for(int i=0;i<sub.size();i++){
+			 if(this.train.get(sub.get(i)).get(label).equals(pos)){
+			    posNum++;
+	         }			
+		}
+		
 		int ind=this.attribute.indexOf(r_add[0]);
 		int p=0; //正例个数
 		int n=0; //负例个数
@@ -243,12 +251,8 @@ public class Rule extends Modeling{
 			     }
 			}			
 		}
-		if(p==1)
 		
-		System.out.println("p:"+p+" n:"+n+" posNum:"+posNum+" size:"+sub.size());
 		FOIL_gain=p*(Math.log((double)p/(p+n))/Math.log(2)-Math.log((double)posNum/sub.size())/Math.log(2));
-		System.out.println("foil:"+FOIL_gain);
-		
 		return FOIL_gain;
 	}
 }
