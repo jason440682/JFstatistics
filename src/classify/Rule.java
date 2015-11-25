@@ -66,7 +66,7 @@ public class Rule extends Modeling{
 	}
 	
 	
-	
+	//删除被新增规则覆盖的元组
 	private void delCover(ArrayList<Integer> sub,ArrayList<String[]> r){
 		for(int i=0;i<sub.size();i++){			
 			if(matchRule(r,train.get(sub.get(i)))){
@@ -80,15 +80,19 @@ public class Rule extends Modeling{
 	private String[] sortLabel(){
 		HashMap<String,Integer> countMap=new HashMap<String,Integer>();
 		int labelNum=att_val.get(label_s).length;
-        for(int i=0;i<labelNum;i++){
+        
+		//初始化
+		for(int i=0;i<labelNum;i++){
 		     countMap.put(att_val.get(label_s)[i],0);	
 		}
+		//计数
         for(int i=0;i<train.size();i++){
         	String val=train.get(i).get(label);
         	int count=countMap.get(val);
         	count++;
         	countMap.put(val,count);
         }
+        //排序
         for(int i=0;i<labelNum;i++){
 		    int min=Integer.MAX_VALUE;
         	for(int j=i;j<labelNum;j++){
@@ -114,15 +118,7 @@ public class Rule extends Modeling{
 			}
 		}
 		
-		ArrayList<Integer> sub2=(ArrayList<Integer>) sub.clone();
-		int p=0;
-		for(int i=0;i<sub2.size();i++){
-			if(train.get(sub2.get(i)).get(label).equals(pos)){
-				p++;
-			}
-		}
-		
-		
+		ArrayList<Integer> sub2=(ArrayList<Integer>) sub.clone();		
 		LinkedList<String> att2=(LinkedList<String>) attribute.clone();
 		att2.remove(label);
 		//加入一个新的合取项。顺序遍历属性-值
@@ -151,8 +147,7 @@ public class Rule extends Modeling{
 					sub2.remove(j);
 					j--;
 				}
-			}
-			
+			}		
 			r.add(max_r);
 		}
 		r.remove(r.size()-1);
