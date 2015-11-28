@@ -3,8 +3,10 @@ package classify;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import tree.BTree;
+import tree.TreeNode;
 import modeling.Modeling;
 
 public class NaiveBayesian extends Modeling{
@@ -17,13 +19,96 @@ public class NaiveBayesian extends Modeling{
 	public LinkedList<HashMap<String,double[]>> cond_p=new LinkedList<HashMap<String,double[]>>();
 	//用来保存每个条件对应各个类的概率
 	
-	BTree dt=new BTree();   //保存最终模型  
+	public BTree model=new BTree();   //保存最终模型  
 	
-	public void test(){
-		
+	public void predict(){
+		int right=0;
+		countCondition();
+		buildModel();
+		for(int i=0;i<test.size();i++){
+			TreeNode p=model.root;			
+			for(int j=0;j<attribute.size();j++){
+				TreeNode[] child=p.child_array;
+				if(!attribute.get(j).equals(label_s)){
+					 String val=test.get(i).get(j);
+					 for(int k=0;k<child.length;k++){
+						 if(val.equals(child[k].value)){
+							 p=child[k];
+							 break;
+						 }
+					 }
+				}
+				if(j==attribute.size()-1){  //最后一层
+					String pred=p.child_array[0].value;
+					System.out.print(" label:"+test.get(i).get(label));
+					System.out.println(" pre:"+pred);
+					if(pred.equals(test.get(i).get(label))){
+						right++;
+					}
+				}
+			}			
+		}
+		System.out.println(" right:"+right+" rate:"+(double) right/test.size());
 	}
 	
 	
+	
+	
+	//生成预测模型
+	public void buildModel(){
+		countLabel();
+		TreeNode p;
+		Stack<TreeNode> stack=new Stack<TreeNode>();
+		stack.push(model.root);
+		for(int i=0;i<attribute.size();i++){
+			if(!attribute.get(i).equals(label_s)){
+				Stack<TreeNode> stack2=new Stack<TreeNode>();
+				HashMap<String,double[]> map=cond_p.get(i);
+				while(!stack.isEmpty()){
+					p=stack.pop();					
+					String att=attribute.get(i);
+					String[] val=att_val.get(att);
+					TreeNode[] child=new TreeNode[val.length];
+					for(int j=0;j<val.length;j++){
+						TreeNode node=new TreeNode(att,val[j]);
+						child[j]=node;
+						stack2.push(child[j]);
+						if(p.pro==null){
+						   node.pro=map.get(val[i]);
+						}else{
+						   double[] pare=p.pro;
+						   double[] curr=map.get(val[j]).clone(); //需要重新克隆一个
+						   for(int k=0;k<pare.length;k++){
+							   curr[k]=curr[k]*pare[k];
+						   }
+						   node.pro=curr;
+						}						
+					}
+					p.setChild(child);;
+				}
+				stack=stack2;				
+			}
+			if(i==attribute.size()-1){   //在最后一层的时候
+				while(!stack.isEmpty()){
+					String max_lab="";
+					double max_pro=-1.0;					
+					p=stack.pop();
+					String[] lab_val=att_val.get(label_s);
+					double[] probability=p.pro;
+					for(int ii=0;ii<lab_val.length;ii++){
+						double curr_p=probability[ii]*p_label.get(lab_val[ii]);
+						if(curr_p>max_pro){
+							max_pro=curr_p;
+							max_lab=lab_val[ii];
+						}
+					}
+					TreeNode[] child=new TreeNode[1];
+					child[0]=new TreeNode("predict",max_lab);
+					p.setChild(child);
+				}
+			}
+		}
+	}
 	
 	public void countCondition(){
 		String[] lab_temp=att_val.get(label_s);
@@ -75,11 +160,10 @@ public class NaiveBayesian extends Modeling{
 					double p=(double)c[k]/sum;
 					pp[k]=p;
 				}
-				val_lab_p.put(val[i],pp);								
+				val_lab_p.put(val[j],pp);								
 			}
-		   cond_p.add(val_lab_p);
-	}
-		
+		    cond_p.add(val_lab_p);
+	   }	
 	}
 	
 	private void countLabel(){
