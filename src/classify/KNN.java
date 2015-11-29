@@ -6,6 +6,10 @@ import java.util.LinkedList;
 
 import modeling.Modeling;
 
+/*算法优化:1.建立搜索树，即选出对类标影响比较大的属性（信息增益），在子树中进行最邻近分析   （决策树与最邻近结合）
+ *       2.裁剪样本，把比较接近的合成一项
+*/
+
 //最邻近分类器
 public class KNN extends Modeling {
     public int K=0;   //参数K；

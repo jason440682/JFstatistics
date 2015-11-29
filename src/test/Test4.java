@@ -10,7 +10,7 @@ public class Test4 {
 		knn.readTrain("data/TrainingData.arff");
 		knn.setLabel("BikeBuyer");    
 		knn.readTest("data/Test.arff");
-		knn.setK(10);
+		knn.setK(5);
 		knn.predict();
 	}
 
