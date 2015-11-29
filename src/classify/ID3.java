@@ -41,17 +41,18 @@ public class ID3 extends Modeling {
 				
 	}
 	
-	public void buildDT(TreeNode node,ArrayList<Integer> sub,List<Integer> att_ind){   //构造决策树
+	public void buildDT(TreeNode node,ArrayList<Integer> sub,
+			            List<Integer> remainding_att){   //构造决策树
 		if(sameLabel(sub)){
 			TreeNode[] c_a=new TreeNode[1];
 			TreeNode left=new TreeNode();
 			left.attribute="label";
-			left.value=this.train.get(0).get(this.label);;
+			left.value=train.get(sub.get(0)).get(this.label);;
 			c_a[0]=left;
 			node.child_array=c_a;	
 			return;   //如果类标相同，则返回
 		}
-		if(att_ind.size()==1){
+		if(remainding_att.size()==1){
 			TreeNode[] c_a=new TreeNode[1];
 			TreeNode left=new TreeNode();
 			left.attribute="label";
@@ -65,9 +66,9 @@ public class ID3 extends Modeling {
 		HashMap<String,ArrayList<Integer>> min_sub=new HashMap<String,ArrayList<Integer>>();
 		//熵最小的划分方式，属性取值对应子数组。
 		
-		for(int i=0;i<att_ind.size();i++){     //把属性循环一遍，找出最小熵对应的属性
-			if(att_ind.get(i)==this.label) continue;
-			int ind=att_ind.get(i);
+		for(int i=0;i<remainding_att.size();i++){     //把属性循环一遍，找出最小熵对应的属性
+			if(remainding_att.get(i)==this.label) continue;
+			int ind=remainding_att.get(i);
 			String atr=this.attribute.get(ind);
 			String[] values=att_val.get(atr);    //根据属性取得该属性的所以取值
 					                                   
@@ -84,7 +85,7 @@ public class ID3 extends Modeling {
 			}
 			
 			for(int k=0;k<sub.size();k++){
-				ind=att_ind.get(i);
+				ind=remainding_att.get(i);
 				String c_value=this.train.get(sub.get(k)).get(ind);  //当前属性值,ind为对于属性索引
 				int count=count_map.get(c_value)+1;
 				count_map.put(c_value, count);
@@ -117,18 +118,26 @@ public class ID3 extends Modeling {
 		for(int ii=0;ii<min_sub.size();ii++){
 			child[ii]=new TreeNode();
 			
-			int ind=att_ind.get(min_index);//从属性索引里面取得索引
+			int ind=remainding_att.get(min_index);//从属性索引里面取得索引
 			
 			String a=this.attribute.get(ind);
 			child[ii].attribute=a;
 			String v=att_val.get(a)[ii];   //属性取值										
 			child[ii].setValue(v);
 			ArrayList<Integer> s=min_sub.get(v);
-			
-			LinkedList<Integer> b=new LinkedList<Integer>();    //删除属性
-			b.addAll(att_ind);
-			b.remove(min_index);
-			buildDT(child[ii],s,b);
+			if(s.size()==0){    //划分的子集为空
+				TreeNode[] c_a=new TreeNode[1];
+				TreeNode left=new TreeNode();
+				left.attribute="label";
+				left.value=mostLabel(sub);
+				c_a[0]=left;
+				child[ii].child_array=c_a;	
+			}else{
+				LinkedList<Integer> b=new LinkedList<Integer>();    //删除属性
+				b.addAll(remainding_att);
+				b.remove(min_index);
+				buildDT(child[ii],s,b);
+			}			
 		}
 		node.child_array=child;
 		
@@ -204,9 +213,9 @@ public class ID3 extends Modeling {
 	}
 	
 	private boolean sameLabel(ArrayList<Integer> sub){  //检查该子集类标是否相同
-		String check=this.train.get(0).get(this.label);
+		String check=train.get(sub.get(0)).get(label);
 		for(int i=1;i<sub.size();i++){
-			if(!check.equals(this.train.get(sub.get(i)).get(this.label))){
+			if(!check.equals(train.get(sub.get(i)).get(label))){
 				return false;
 			}
 		}
@@ -215,38 +224,31 @@ public class ID3 extends Modeling {
 	
 	private String mostLabel(ArrayList<Integer> sub){
 		String most="";
-		HashMap<String,Integer> label_map=new HashMap<String,Integer>();
-		String lab=this.attribute.get(this.label);
-		String[] label_value=att_val.get(lab);
+		String[] label_value=att_val.get(label_s);
+		LinkedList<String> label_list=new LinkedList<String>();
+        int[] count=new int[label_value.length];
+        Arrays.fill(count, 0);
 		for(int i=0;i<label_value.length;i++){
-			label_map.put(label_value[i],0);
-		}
-		
+        	label_list.add(label_value[i]);
+        }
 		for(int j=0;j<sub.size();j++){
 			String cur_val=this.train.get(sub.get(j)).get(this.label);
-			int count=label_map.get(cur_val)+1;
-			label_map.put(cur_val,count);
+			int ind=label_list.indexOf(cur_val);
+			count[ind]++;
 		}
-		
 		int findmost=0;
 		for(int i=0;i<label_value.length;i++){
-			int temp=label_map.get(label_value[i]);
-			if(findmost<temp){
-				findmost=temp;
+			if(findmost<count[i]){
+				findmost=count[i];
 				most=label_value[i];
 			}
-		}
-		
-		
+		}		
 		return most;
+       
 	}
 	
 	//使用已经存在的决策树模型
 	public void readModel(){
 		
 	}
-	
-	
-	
-
 }

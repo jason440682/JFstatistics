@@ -26,27 +26,26 @@ public class NaiveBayesian extends Modeling{
 		countCondition();
 		buildModel();
 		for(int i=0;i<test.size();i++){
-			TreeNode p=model.root;			
-			for(int j=0;j<attribute.size();j++){
-				TreeNode[] child=p.child_array;
-				if(!attribute.get(j).equals(label_s)){
-					 String val=test.get(i).get(j);
-					 for(int k=0;k<child.length;k++){
-						 if(val.equals(child[k].value)){
-							 p=child[k];
-							 break;
-						 }
-					 }
-				}
-				if(j==attribute.size()-1){  //最后一层
-					String pred=p.child_array[0].value;
-					System.out.print(" label:"+test.get(i).get(label));
-					System.out.println(" pre:"+pred);
-					if(pred.equals(test.get(i).get(label))){
-						right++;
+			TreeNode p=model.root;
+			while(p.attribute!="predict"){
+				String att=p.child_array[0].attribute;
+				if(att=="predict"){
+					p=p.child_array[0];
+				}else{
+					int ind=attribute.indexOf(att);
+					String val=test.get(i).get(ind);
+					TreeNode[] child=p.child_array;
+					for(int j=0;j<child.length;j++){
+						if(child[j].value.equals(val)){
+							p=child[j];
+						}
 					}
-				}
-			}			
+				}			
+			}
+			if(p.value.equals(test.get(i).get(label))){
+				right++;
+			}
+			System.out.println("pre:"+p.value+" real:"+test.get(i).get(label));
 		}
 		System.out.println(" right:"+right+" rate:"+(double) right/test.size());
 	}
