@@ -1,5 +1,6 @@
 package utility;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 
@@ -39,6 +40,16 @@ public class SequenceList {
 	
 	public Integer get(int i){
 		return list.get(i);
+	}
+	
+	public void addAll(SequenceList s){
+		for(int i=0;i<s.size();i++){
+			list.add(s.get(i));
+		}
+	}
+	
+	public Integer getLast(){
+		return list.getLast();
 	}
 	
 	public static void main(String[] args) {
