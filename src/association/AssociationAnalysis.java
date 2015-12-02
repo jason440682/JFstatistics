@@ -12,7 +12,7 @@ public class AssociationAnalysis {
 	private double minConf=0.0;         //置信度
 	private LinkedList<SequenceList>  data=new LinkedList<SequenceList>();
 	private HashMap<SequenceList,Integer> supportCount=new HashMap<SequenceList,Integer>();
-	//private HashMap<SequenceList,SequenceList> assocaitionRule=new HashMap<SequenceList,SequenceList>(); 
+	private LinkedList<AssociationRule> ruleList=new LinkedList<AssociationRule>(); 
 	private LinkedList<LinkedList<SequenceList>> kItemList=new LinkedList<LinkedList<SequenceList>>();
 	public void setMinSupport(double support){
 		this.minSupport=support;
@@ -38,11 +38,13 @@ public class AssociationAnalysis {
 		if(k>m){
 			int size=backItem.size();
 			for(int i=0;i<size;i++){
+				SequenceList frontItem=getFront(one_kItem,backItem.get(i));
 				int fk=supportCount.get(one_kItem);
-				int fk_h=getSupportCount(one_kItem,backItem.get(i));
+				int fk_h=getSupportCount(frontItem);
 				double conf=(double) fk/fk_h;//频繁项集支持度计数除以前项支持度计数
 			    if(conf>minConf){
-			    	//输出规则			    	
+			    	AssociationRule rule=new AssociationRule(frontItem,backItem.get(i));
+			    	ruleList.add(rule);		    	
 			    }else{
 			    	backItem.remove(i);
 			    }
@@ -51,20 +53,25 @@ public class AssociationAnalysis {
 		   	apGenrules(one_kItem,genBackItem);
 		}
 	}
-	private int getSupportCount(SequenceList all,SequenceList back){
-		SequenceList font=new SequenceList();
+	
+	public SequenceList getFront(SequenceList all,SequenceList back){
+		SequenceList front=new SequenceList();
 		for(int i=0;i<all.size();i++){
 			if(!back.contain(all.get(i))){
-				font.add(all.get(i));
+				front.add(all.get(i));
 			}
 		}
-		int len=font.size();
+		return front;
+	}
+	
+	private int getSupportCount(SequenceList front){
+		int len=front.size();
 		LinkedList<SequenceList> itemList=kItemList.get(len-1);
 		for(int i=0;i<itemList.size();i++){
 			SequenceList temp=itemList.get(i);
 			boolean equal=true;
 			for(int j=0;j<len;j++){
-				if(!temp.contain(font.get(j))){
+				if(!temp.contain(front.get(j))){
 					equal=false;
 				}
 			}
