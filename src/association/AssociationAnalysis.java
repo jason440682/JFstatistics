@@ -9,20 +9,88 @@ import utility.SequenceList;
 public class AssociationAnalysis {
     //输入项以自然数1，2，3，4，……表示
 	private double minSupport=0.0;  //支持度
+	private double minConf=0.0;         //置信度
 	private LinkedList<SequenceList>  data=new LinkedList<SequenceList>();
-	private HashMap<SequenceList,Integer> supportCount=new HashMap<SequenceList,Integer>(); 
-	public void setSupport(double support){
+	private HashMap<SequenceList,Integer> supportCount=new HashMap<SequenceList,Integer>();
+	//private HashMap<SequenceList,SequenceList> assocaitionRule=new HashMap<SequenceList,SequenceList>(); 
+	private LinkedList<LinkedList<SequenceList>> kItemList=new LinkedList<LinkedList<SequenceList>>();
+	public void setMinSupport(double support){
 		this.minSupport=support;
+	}
+	public void setMinConfidence(double confidence){
+		this.minConf=confidence;
+	}
+	
+	public void frequentRule(){
+		for(int i=1;i<kItemList.size();i++){
+			LinkedList<SequenceList> kItem=kItemList.get(i);   //频繁k项集		
+			for(int j=0;j<kItem.size();j++){
+				SequenceList one_kItem=kItem.get(j);           //一个频繁k项集
+				LinkedList<SequenceList> oneBackItem=getOneBack(one_kItem);   //规则的一项后件
+				apGenrules(one_kItem,oneBackItem);
+			}
+		}
+	}
+	
+	public void apGenrules(SequenceList one_kItem,LinkedList<SequenceList> backItem){
+		int k=one_kItem.size();            //评分项集大小
+		int m=backItem.get(0).size();   //规则后件大小
+		if(k>m){
+			int size=backItem.size();
+			for(int i=0;i<size;i++){
+				int fk=supportCount.get(one_kItem);
+				int fk_h=getSupportCount(one_kItem,backItem.get(i));
+				double conf=(double) fk/fk_h;//频繁项集支持度计数除以前项支持度计数
+			    if(conf>minConf){
+			    	//输出规则			    	
+			    }else{
+			    	backItem.remove(i);
+			    }
+			}
+		   	LinkedList<SequenceList> genBackItem=apriori_gen(backItem);
+		   	apGenrules(one_kItem,genBackItem);
+		}
+	}
+	private int getSupportCount(SequenceList all,SequenceList back){
+		SequenceList font=new SequenceList();
+		for(int i=0;i<all.size();i++){
+			if(!back.contain(all.get(i))){
+				font.add(all.get(i));
+			}
+		}
+		int len=font.size();
+		LinkedList<SequenceList> itemList=kItemList.get(len-1);
+		for(int i=0;i<itemList.size();i++){
+			SequenceList temp=itemList.get(i);
+			boolean equal=true;
+			for(int j=0;j<len;j++){
+				if(!temp.contain(font.get(j))){
+					equal=false;
+				}
+			}
+			if(equal){
+				return supportCount.get(temp);
+			}
+		}
+		return 0;		
+	}
+	public LinkedList<SequenceList> getOneBack(SequenceList one_kItem){
+		LinkedList<SequenceList> oneBackItem=new LinkedList<SequenceList>();
+		for(int i=0;i<one_kItem.size();i++){
+			SequenceList item=new SequenceList();
+			item.add(one_kItem.get(i));
+			oneBackItem.add(item);
+		}
+		return oneBackItem;
 	}
 	
 	public void getFrequent(){  //得到所有的频繁项集
 		LinkedList<SequenceList> oneItem=getItem();
-		HashMap<Integer,LinkedList<SequenceList>> kItemMap=new HashMap<Integer,LinkedList<SequenceList>>();
-		kItemMap.put(1,oneItem);
 		
 		LinkedList<SequenceList> index=oneItem;
 		int k=1;
 		while(index.size()!=0){
+			kItemList.add(index);
 			k=k+1;
 			LinkedList<SequenceList> candidate=apriori_gen(index);
 			LinkedList<SequenceList> cut=new LinkedList<SequenceList>();
@@ -35,7 +103,6 @@ public class AssociationAnalysis {
 				}				
 			}
 			index=cut;
-			kItemMap.put(k,cut);
 		}
 	}
 	
@@ -120,9 +187,9 @@ public class AssociationAnalysis {
 	}
 	
 	
-	public boolean containItem(SequenceList item,SequenceList affair){
-		for(int i=0;i<item.size();i++){
-			if(!affair.contain(item.get(i))){
+	public boolean containItem(SequenceList kItem,SequenceList affair){
+		for(int i=0;i<kItem.size();i++){
+			if(!affair.contain(kItem.get(i))){
 				return false;
 			}
 		}
@@ -130,7 +197,7 @@ public class AssociationAnalysis {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// 
 
 	}
 

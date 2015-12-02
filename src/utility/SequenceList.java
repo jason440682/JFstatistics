@@ -35,7 +35,11 @@ public class SequenceList {
     	
     }
 	public boolean contain(Integer t){
-		return false;
+		if(list.contains(t)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public Integer get(int i){
