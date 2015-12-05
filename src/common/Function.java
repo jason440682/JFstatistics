@@ -1,8 +1,7 @@
 package common;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+
 
 public class Function {
     //统计学上常用函数

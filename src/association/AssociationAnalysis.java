@@ -27,12 +27,12 @@ public class AssociationAnalysis {
 			for(int j=0;j<kItem.size();j++){
 				SequenceList one_kItem=kItem.get(j);           //一个频繁k项集
 				LinkedList<SequenceList> oneBackItem=getOneBack(one_kItem);   //规则的一项后件
-				apGenrules(one_kItem,oneBackItem);
+				apGenRules(one_kItem,oneBackItem);
 			}
 		}
 	}
 	
-	public void apGenrules(SequenceList one_kItem,LinkedList<SequenceList> backItem){
+	public void apGenRules(SequenceList one_kItem,LinkedList<SequenceList> backItem){
 		int k=one_kItem.size();            //评分项集大小
 		int m=backItem.get(0).size();   //规则后件大小
 		if(k>m){
@@ -50,7 +50,7 @@ public class AssociationAnalysis {
 			    }
 			}
 		   	LinkedList<SequenceList> genBackItem=apriori_gen(backItem);
-		   	apGenrules(one_kItem,genBackItem);
+		   	apGenRules(one_kItem,genBackItem);
 		}
 	}
 	

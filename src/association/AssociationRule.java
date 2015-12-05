@@ -10,5 +10,11 @@ public class AssociationRule {
 		this.back=back;
 	}
 	
-
+	public SequenceList getFront(){
+		return this.front;
+	}
+    
+	public SequenceList getBack(){
+		return this.back;
+	}
 }

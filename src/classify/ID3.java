@@ -14,12 +14,11 @@ import tree.TreeNode;
 public class ID3 extends Modeling {
     //定义：生成多叉树
 	public BTree tree=new BTree();
-	
 
 	private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
 		double entropy=0.0;
 		if(sub.size()==0) return entropy;
-		String[] label_v=this.att_val.get(this.label_s);
+		String[] label_v=att_val.get(this.label_s);
 		int len=label_v.length;
 		int[] count=new int[len];
 		Arrays.fill(count,0);  //初始化为零
@@ -41,24 +40,25 @@ public class ID3 extends Modeling {
 				
 	}
 	
+	private void genLeft(TreeNode node,String value){  //生成叶结点
+		TreeNode[] child=new TreeNode[1];
+		TreeNode left=new TreeNode();
+		left.attribute="label";
+		left.value=value;
+		child[0]=left;
+		node.child_array=child;	
+	}
+	
 	public void buildDT(TreeNode node,ArrayList<Integer> sub,
 			            List<Integer> remainding_att){   //构造决策树
 		if(sameLabel(sub)){
-			TreeNode[] c_a=new TreeNode[1];
-			TreeNode left=new TreeNode();
-			left.attribute="label";
-			left.value=train.get(sub.get(0)).get(this.label);;
-			c_a[0]=left;
-			node.child_array=c_a;	
+			String value=train.get(sub.get(0)).get(this.label);;
+			genLeft(node,value);	
 			return;   //如果类标相同，则返回
 		}
 		if(remainding_att.size()==1){
-			TreeNode[] c_a=new TreeNode[1];
-			TreeNode left=new TreeNode();
-			left.attribute="label";
-			left.value=mostLabel(sub);
-			c_a[0]=left;
-			node.child_array=c_a;	
+			String value=mostLabel(sub);
+			genLeft(node,value);
 			return;  //划分属性用完
 		}
 		double minEntropy=1.0; //最小熵
@@ -104,7 +104,7 @@ public class ID3 extends Modeling {
 				sum_entropy+=(double) count/sub.size()*getEntropy(s_sub);
 				
 			}
-			//System.out.println("en:"+sum_entropy);
+			
 			if(sum_entropy<=minEntropy){
 				minEntropy=sum_entropy;
 				min_index=i;
@@ -125,13 +125,9 @@ public class ID3 extends Modeling {
 			String v=att_val.get(a)[ii];   //属性取值										
 			child[ii].setValue(v);
 			ArrayList<Integer> s=min_sub.get(v);
-			if(s.size()==0){    //划分的子集为空
-				TreeNode[] c_a=new TreeNode[1];
-				TreeNode left=new TreeNode();
-				left.attribute="label";
-				left.value=mostLabel(sub);
-				c_a[0]=left;
-				child[ii].child_array=c_a;	
+			if(s.size()==0){    //划分的子集为空,则选取未划分前的多数类标
+				String value=mostLabel(sub);
+				genLeft(child[ii],value);
 			}else{
 				LinkedList<Integer> b=new LinkedList<Integer>();    //删除属性
 				b.addAll(remainding_att);
@@ -223,7 +219,6 @@ public class ID3 extends Modeling {
 	}
 	
 	private String mostLabel(ArrayList<Integer> sub){
-		String most="";
 		String[] label_value=att_val.get(label_s);
 		LinkedList<String> label_list=new LinkedList<String>();
         int[] count=new int[label_value.length];
@@ -236,14 +231,13 @@ public class ID3 extends Modeling {
 			int ind=label_list.indexOf(cur_val);
 			count[ind]++;
 		}
-		int findmost=0;
+		int most=0;
 		for(int i=0;i<label_value.length;i++){
-			if(findmost<count[i]){
-				findmost=count[i];
-				most=label_value[i];
+			if(count[most]<count[i]){
+				most=i;
 			}
 		}		
-		return most;
+		return label_value[most];
        
 	}
 	
