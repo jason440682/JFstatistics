@@ -1,5 +1,9 @@
 package association;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -47,10 +51,14 @@ public class AssociationAnalysis {
 			    	ruleList.add(rule);		    	
 			    }else{
 			    	backItem.remove(i);
+			    	i--;
+			    	size--;
 			    }
 			}
-		   	LinkedList<SequenceList> genBackItem=apriori_gen(backItem);
-		   	apGenRules(one_kItem,genBackItem);
+			LinkedList<SequenceList> genBackItem=apriori_gen(backItem);		   	
+			if(genBackItem.size()!=0){
+				apGenRules(one_kItem,genBackItem);
+			}	   
 		}
 	}
 	
@@ -93,7 +101,6 @@ public class AssociationAnalysis {
 	
 	public void getFrequent(){  //得到所有的频繁项集
 		LinkedList<SequenceList> oneItem=getItem();
-		
 		LinkedList<SequenceList> index=oneItem;
 		int k=1;
 		while(index.size()!=0){
@@ -136,11 +143,14 @@ public class AssociationAnalysis {
 		for(int i=0;i<data.size();i++){
  			SequenceList affair=data.get(i);
  			for(int j=0;j<affair.size();j++){
+ 				//这里的判断太慢了
  				if(!item.contain(affair.get(j))){
  					item.add(affair.get(j));
+ 					System.out.println("add:"+affair.get(j));
  				}
  			}
  		}
+		System.out.println("item:"+item.size());
 		
 		int[] count=new int[item.size()];   //计算支持度计数
 		Arrays.fill(count,0);
@@ -152,8 +162,7 @@ public class AssociationAnalysis {
 	 			}
 			}
 		}
- 		
-		for(int i=0;i<item.size();i++){
+ 		for(int i=0;i<item.size();i++){
 			if(count[i]>item.size()*minSupport){
 				SequenceList eachItem=new SequenceList();
 				eachItem.add(item.get(i));
@@ -203,9 +212,54 @@ public class AssociationAnalysis {
 		return true;
 	}
 	
-	public static void main(String[] args) {
-		// 
-
+	public void readData(String path) throws Exception{
+		File file= new File(path);
+		FileReader read=new FileReader(file);
+		BufferedReader br=new BufferedReader(read);
+		String line="";
+		int count=0;
+		line=br.readLine();
+		while(line!=null&&count<10000){
+			String[] dataPoint=line.split(" ");
+			SequenceList affairs=new SequenceList();
+			for(int i=0;i<dataPoint.length;i++){
+				affairs.add(Integer.valueOf(dataPoint[i]));
+			}
+			data.add(affairs);			
+			System.out.println(line);
+			line=br.readLine();	
+			count++;
+		}
+		br.close();
+	}
+	
+	public void printRule(){
+		for(int i=0;i<this.ruleList.size();i++){
+			AssociationRule rule=ruleList.get(i);
+			System.out.print("front:");
+			SequenceList front=rule.getFront();
+			SequenceList back=rule.getBack();
+			for(int j=0;j<front.size();j++){
+				System.out.print(front.get(j)+" ");
+			}
+			System.out.print("back:");
+			for(int j=0;j<back.size();j++){
+				System.out.print(back.get(j)+" ");
+			}
+			System.out.println(" ");
+			
+		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		AssociationAnalysis ass=new AssociationAnalysis();
+		ass.setMinSupport(0.3);
+		ass.setMinConfidence(0.8);
+		//ass.readData("data\\association");
+		ass.readData("D:\\迅雷下载\\关联规则\\关联规则\\T10I4D100K.txt");
+		ass.getFrequent();
+		ass.frequentRule();
+        ass.printRule();
 	}
 
 }

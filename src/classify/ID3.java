@@ -37,7 +37,6 @@ public class ID3 extends Modeling {
 			}		
 		}
 		return entropy;
-				
 	}
 	
 	private void genLeft(TreeNode node,String value){  //生成叶结点
@@ -56,18 +55,17 @@ public class ID3 extends Modeling {
 			genLeft(node,value);	
 			return;   //如果类标相同，则返回
 		}
-		if(remainding_att.size()==1){
+		if(remainding_att.size()==0){
 			String value=mostLabel(sub);
 			genLeft(node,value);
 			return;  //划分属性用完
-		}
+		}		
 		double minEntropy=1.0; //最小熵
 		int min_index=0;   //最少熵对应的属性索引
 		HashMap<String,ArrayList<Integer>> min_sub=new HashMap<String,ArrayList<Integer>>();
 		//熵最小的划分方式，属性取值对应子数组。
 		
 		for(int i=0;i<remainding_att.size();i++){     //把属性循环一遍，找出最小熵对应的属性
-			if(remainding_att.get(i)==this.label) continue;
 			int ind=remainding_att.get(i);
 			String atr=this.attribute.get(ind);
 			String[] values=att_val.get(atr);    //根据属性取得该属性的所以取值
@@ -115,24 +113,24 @@ public class ID3 extends Modeling {
 		//这里得到了最佳划分属性对应的索引min_index
 		
 		TreeNode[] child=new TreeNode[min_sub.size()];
-		for(int ii=0;ii<min_sub.size();ii++){
-			child[ii]=new TreeNode();
+		for(int i=0;i<min_sub.size();i++){
+			child[i]=new TreeNode();
 			
 			int ind=remainding_att.get(min_index);//从属性索引里面取得索引
 			
-			String a=this.attribute.get(ind);
-			child[ii].attribute=a;
-			String v=att_val.get(a)[ii];   //属性取值										
-			child[ii].setValue(v);
+			String att=attribute.get(ind);
+			child[i].attribute=att;
+			String v=att_val.get(att)[i];   //属性取值										
+			child[i].setValue(v);
 			ArrayList<Integer> s=min_sub.get(v);
 			if(s.size()==0){    //划分的子集为空,则选取未划分前的多数类标
 				String value=mostLabel(sub);
-				genLeft(child[ii],value);
+				genLeft(child[i],value);
 			}else{
-				LinkedList<Integer> b=new LinkedList<Integer>();    //删除属性
-				b.addAll(remainding_att);
-				b.remove(min_index);
-				buildDT(child[ii],s,b);
+				LinkedList<Integer> copyAtt=new LinkedList<Integer>();    //删除属性
+				copyAtt.addAll(remainding_att);
+				copyAtt.remove(min_index);
+				buildDT(child[i],s,copyAtt);
 			}			
 		}
 		node.child_array=child;
@@ -149,6 +147,9 @@ public class ID3 extends Modeling {
 		
 		LinkedList<Integer> att_index=new LinkedList<Integer>();  //属性集索引
 		for(int j=0;j<this.attribute.size();j++){
+			if(j==label){
+				continue;
+			}
 			att_index.add(j);
 		}
 		

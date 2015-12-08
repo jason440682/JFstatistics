@@ -1,6 +1,5 @@
 package utility;
 
-import java.util.Collection;
 import java.util.LinkedList;
 
 
@@ -35,11 +34,14 @@ public class SequenceList {
     	
     }
 	public boolean contain(Integer t){
-		if(list.contains(t)){
-			return true;
-		}else{
-			return false;
+		for(int i=0;i<list.size();i++){
+			if(t<list.get(i)){
+				return false;
+			}else if(t.equals(list.get(i))){
+				return true;
+			}			
 		}
+		return false;
 	}
 	
 	public Integer get(int i){
@@ -55,6 +57,8 @@ public class SequenceList {
 	public Integer getLast(){
 		return list.getLast();
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
