@@ -1,4 +1,4 @@
-package tree;
+package model;
 
 public class TreeNode {
     public TreeNode[] child_array;  

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import tree.BTree;
-import tree.TreeNode;
+import model.TreeModel;
+import model.TreeNode;
 import modeling.Modeling;
 
 public class NaiveBayesian extends Modeling{
@@ -19,7 +19,7 @@ public class NaiveBayesian extends Modeling{
 	public LinkedList<HashMap<String,double[]>> cond_p=new LinkedList<HashMap<String,double[]>>();
 	//用来保存每个条件对应各个类的概率
 	
-	public BTree model=new BTree();   //保存最终模型  
+	public TreeModel model=new TreeModel();   //保存最终模型  
 	
 	public void predict(){
 		int right=0;

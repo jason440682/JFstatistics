@@ -2,7 +2,6 @@ package association;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -146,12 +145,9 @@ public class AssociationAnalysis {
  				//这里的判断太慢了
  				if(!item.contain(affair.get(j))){
  					item.add(affair.get(j));
- 					System.out.println("add:"+affair.get(j));
  				}
  			}
  		}
-		System.out.println("item:"+item.size());
-		
 		int[] count=new int[item.size()];   //计算支持度计数
 		Arrays.fill(count,0);
 		for(int i=0;i<item.size();i++){
@@ -253,10 +249,10 @@ public class AssociationAnalysis {
 	
 	public static void main(String[] args) throws Exception {
 		AssociationAnalysis ass=new AssociationAnalysis();
-		ass.setMinSupport(0.3);
+		ass.setMinSupport(0.2);
 		ass.setMinConfidence(0.8);
-		//ass.readData("data\\association");
-		ass.readData("D:\\迅雷下载\\关联规则\\关联规则\\T10I4D100K.txt");
+		ass.readData("data\\association");
+		//ass.readData("D:\\迅雷下载\\关联规则\\关联规则\\T10I4D100K.txt");
 		ass.getFrequent();
 		ass.frequentRule();
         ass.printRule();

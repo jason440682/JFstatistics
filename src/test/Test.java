@@ -14,6 +14,7 @@ public class Test {
 		id3.setLabel("BikeBuyer");    
 		id3.readTest("data/Test.arff");
 		id3.predict();
+
 		
 
 /*		

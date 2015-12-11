@@ -7,13 +7,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import model.TreeModel;
+import model.TreeNode;
 import modeling.Modeling;
-import tree.BTree;
-import tree.TreeNode;
 
 public class ID3 extends Modeling {
     //定义：生成多叉树
-	public BTree tree=new BTree();
+	Document document = DocumentHelper.createDocument();
+    Element root=document.addElement("ID3");
+    
+	public TreeModel tree=new TreeModel();
 
 	private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
 		double entropy=0.0;
@@ -39,25 +46,19 @@ public class ID3 extends Modeling {
 		return entropy;
 	}
 	
-	private void genLeft(TreeNode node,String value){  //生成叶结点
-		TreeNode[] child=new TreeNode[1];
-		TreeNode left=new TreeNode();
-		left.attribute="label";
-		left.value=value;
-		child[0]=left;
-		node.child_array=child;	
-	}
-	
-	public void buildDT(TreeNode node,ArrayList<Integer> sub,
+		
+	public void buildDT(Element ele,ArrayList<Integer> sub,
 			            List<Integer> remainding_att){   //构造决策树
 		if(sameLabel(sub)){
-			String value=train.get(sub.get(0)).get(this.label);;
-			genLeft(node,value);	
+			String value=train.get(sub.get(0)).get(this.label);
+			Element element=ele.addElement("label");
+			element.addText(value);
 			return;   //如果类标相同，则返回
 		}
 		if(remainding_att.size()==0){
 			String value=mostLabel(sub);
-			genLeft(node,value);
+			Element element=ele.addElement("label");
+			element.addText(value);
 			return;  //划分属性用完
 		}		
 		double minEntropy=1.0; //最小熵
@@ -112,7 +113,7 @@ public class ID3 extends Modeling {
 		}
 		//这里得到了最佳划分属性对应的索引min_index
 		
-		TreeNode[] child=new TreeNode[min_sub.size()];
+		Element[] child=new Element[min_sub.size()];
 		for(int i=0;i<min_sub.size();i++){
 			child[i]=new TreeNode();
 			
@@ -153,7 +154,7 @@ public class ID3 extends Modeling {
 			att_index.add(j);
 		}
 		
-		buildDT(this.tree.root,all,att_index);
+		buildDT(root,this.tree.root,all,att_index);
 		//printDT(this.tree.root,0);
 		
 		int right=0;
@@ -184,15 +185,16 @@ public class ID3 extends Modeling {
 			}
 		}
 		
-		for(int j=0;j<pre.size();j++){
+/*		for(int j=0;j<pre.size();j++){
 			System.out.println("real:"+test.get(j).get(8)+" pre:"+pre.get(j));
 		}
-		System.out.println("正确:"+right+" 总共:"+test.size()+" 准确率:"+(double)right/test.size());
-		return this.test;
+*/		System.out.println("正确:"+right+" 总共:"+test.size()+" 准确率:"+(double)right/test.size());
+		printDT(this.tree.root,0);
+        return this.test;
 		
 	}
 	
-	private void printDT(TreeNode node,int plies){
+	public void printDT(TreeNode node,int plies){
 		
 		for(int i=0;i<plies;i++){
 			System.out.print("--");
@@ -204,9 +206,7 @@ public class ID3 extends Modeling {
 			for(int j=0;j<child.length;j++){
 				printDT(child[j],plies+1);
 			}
-		}
-		
-		
+		}		
 	}
 	
 	private boolean sameLabel(ArrayList<Integer> sub){  //检查该子集类标是否相同

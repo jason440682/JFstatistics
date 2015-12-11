@@ -1,23 +1,27 @@
 package test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.io.FileWriter;
 
-import utility.SequenceList;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.XMLWriter;
+
+
 
 public class Test2 {
-
+	
 	public static void main(String[] args) throws Exception  {
-		Integer a=299;
-		Integer b=299;
-		System.out.println(a.equals(b));
-		
-		
+		 Document document = DocumentHelper.createDocument();
+         Element root=document.addElement("jason");
+         Element ele=root.addElement("性别");
+         System.out.println(ele.getName());
+         Element ele2=root.addElement("身高");
+         XMLWriter writer = new XMLWriter(new  FileWriter("D:\\ot.xml"));
+         root.elementIterator()
+         writer.write(document);
+         writer.close();
+     	
 	}
 
 }
