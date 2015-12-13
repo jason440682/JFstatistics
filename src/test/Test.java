@@ -13,7 +13,9 @@ public class Test {
 		id3.readTrain("data/TrainingData.arff");
 		id3.setLabel("BikeBuyer");    
 		id3.readTest("data/Test.arff");
+		id3.train();
 		id3.predict();
+		id3.writeModel();
 
 		
 

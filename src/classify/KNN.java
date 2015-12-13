@@ -75,8 +75,6 @@ public class KNN extends Modeling {
 				most=label_value[i];
 			}
 		}
-		
-		
 		return most;
 	}
 	public double similarity(ArrayList<String> x1,ArrayList<String> x2){

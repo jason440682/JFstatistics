@@ -1,28 +1,29 @@
 package classify;
 
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.XMLWriter;
 
-import model.TreeModel;
-import model.TreeNode;
 import modeling.Modeling;
 
 public class ID3 extends Modeling {
     //定义：生成多叉树
 	Document document = DocumentHelper.createDocument();
     Element root=document.addElement("ID3");
-    
-	public TreeModel tree=new TreeModel();
-
-	private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
+    private double getEntropy(ArrayList<Integer> sub){   //输入的是子集数组的索引
 		double entropy=0.0;
 		if(sub.size()==0) return entropy;
 		String[] label_v=att_val.get(this.label_s);
@@ -45,20 +46,24 @@ public class ID3 extends Modeling {
 		}
 		return entropy;
 	}
+    private void setLeft(Element ele,String predict){
+    	ele.addAttribute("child","label");
+		Element element=ele.addElement("label");
+		element.addText(predict);
+		
+    }
 	
 		
 	public void buildDT(Element ele,ArrayList<Integer> sub,
 			            List<Integer> remainding_att){   //构造决策树
 		if(sameLabel(sub)){
 			String value=train.get(sub.get(0)).get(this.label);
-			Element element=ele.addElement("label");
-			element.addText(value);
+			setLeft(ele,value);
 			return;   //如果类标相同，则返回
 		}
 		if(remainding_att.size()==0){
 			String value=mostLabel(sub);
-			Element element=ele.addElement("label");
-			element.addText(value);
+			setLeft(ele,value);			
 			return;  //划分属性用完
 		}		
 		double minEntropy=1.0; //最小熵
@@ -112,35 +117,28 @@ public class ID3 extends Modeling {
 			}						 											
 		}
 		//这里得到了最佳划分属性对应的索引min_index
-		
-		Element[] child=new Element[min_sub.size()];
+		int ind=remainding_att.get(min_index);//从属性索引里面取得索引
+		String att=attribute.get(ind);
+		ele.addAttribute("child",att);
 		for(int i=0;i<min_sub.size();i++){
-			child[i]=new TreeNode();
 			
-			int ind=remainding_att.get(min_index);//从属性索引里面取得索引
-			
-			String att=attribute.get(ind);
-			child[i].attribute=att;
+			Element element=ele.addElement(att);
 			String v=att_val.get(att)[i];   //属性取值										
-			child[i].setValue(v);
-			ArrayList<Integer> s=min_sub.get(v);
-			if(s.size()==0){    //划分的子集为空,则选取未划分前的多数类标
+			element.addAttribute("value",v);
+			ArrayList<Integer> split=min_sub.get(v);
+			if(split.size()==0){    //划分的子集为空,则选取未划分前的多数类标
 				String value=mostLabel(sub);
-				genLeft(child[i],value);
+				setLeft(element,value);
 			}else{
 				LinkedList<Integer> copyAtt=new LinkedList<Integer>();    //删除属性
 				copyAtt.addAll(remainding_att);
 				copyAtt.remove(min_index);
-				buildDT(child[i],s,copyAtt);
+				buildDT(element,split,copyAtt);
 			}			
-		}
-		node.child_array=child;
-		
-		
-		
+		}	
 	}
 	
-	public List<ArrayList<String>> predict(){
+	public void train(){
 		ArrayList<Integer> all=new ArrayList<Integer>();   //元组索引
 		for(int i=0;i<this.train.size();i++){
 			all.add(i);
@@ -154,59 +152,50 @@ public class ID3 extends Modeling {
 			att_index.add(j);
 		}
 		
-		buildDT(root,this.tree.root,all,att_index);
-		//printDT(this.tree.root,0);
-		
+		buildDT(root,all,att_index);        		
+	}
+	
+	public void writeModel(){
+		XMLWriter writer;
+		try {
+			writer = new XMLWriter(new  FileWriter("D:\\ot.xml"));
+			writer.write(document);
+	        writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+	}
+	
+	public void predict(){
 		int right=0;
-        
-        
-        List<String> pre=new LinkedList<String>();
+		Element p;
 		for(int i=0;i<test.size();i++){
-			TreeNode p=this.tree.root;
-			while(p.attribute!="label"){
-				String c_att=p.child_array[0].attribute;
-				if(c_att=="label"){
-					p=p.child_array[0];
-				}else{
-					int ind=this.attribute.indexOf(c_att);
-					String val=test.get(i).get(ind);		
-					for(int j=0;j<p.child_array.length;j++){				
-						if(val.equals(p.child_array[j].value)){
-							p=p.child_array[j];
-							break;
-						}
-					}
-				}									
+			p=root;
+			while(!p.attributeValue("child").equals("label")){
+				String att=p.attributeValue("child");
+				//System.out.println(att);				
+				int ind=attribute.indexOf(att);
+				String value=test.get(i).get(ind);   //测试集该属性的值
+				for(Iterator<Element> it=p.elementIterator();it.hasNext();){  
+			        Element element = (Element) it.next();
+			        if(element.attributeValue("value").equals(value)){
+			        	p=element;
+			        	break;
+			        }
+			    }  
 			}
-			pre.add(p.value);
-			test.get(i).add(p.value);
-			if(p.value.equals(test.get(i).get(label))){
+			Element left=p.element("label");
+			String pre=left.getText();
+			String real=test.get(i).get(label);
+			System.out.println("real:"+real+" pre:"+pre);
+			if(pre.equals(real)){
 				right++;
 			}
 		}
+		double rate=(double)right/test.size();
+		System.out.println("right:"+right+" size:"+test.size()+" rate:"+rate);
 		
-/*		for(int j=0;j<pre.size();j++){
-			System.out.println("real:"+test.get(j).get(8)+" pre:"+pre.get(j));
-		}
-*/		System.out.println("正确:"+right+" 总共:"+test.size()+" 准确率:"+(double)right/test.size());
-		printDT(this.tree.root,0);
-        return this.test;
-		
-	}
-	
-	public void printDT(TreeNode node,int plies){
-		
-		for(int i=0;i<plies;i++){
-			System.out.print("--");
-		}
-		System.out.print("attribute:"+node.attribute+"---value:"+node.value);
-		System.out.println(" ");
-		if(node.child_array!=null){
-			TreeNode[] child=node.child_array;
-			for(int j=0;j<child.length;j++){
-				printDT(child[j],plies+1);
-			}
-		}		
 	}
 	
 	private boolean sameLabel(ArrayList<Integer> sub){  //检查该子集类标是否相同
